@@ -1,0 +1,36 @@
+Country letter code,ISO code,Country,New population,EXCLUDE1isyes,Start year,End year,Age  range,Population type,Contraceptive-use-ANY,Contraceptive-use-MODERN,GEO biases (unknown direction),Non-pregnant and other positive biases,Modern method bias,Folk method positive bias,Unmet,Data series/type,Source name
+IND ,356,India,,,1970,1970,15-44,HW,13.6,9.5,,,,,,National survey,First All India Survey 
+IND ,356,India,,,1980,1980,15+,HW,35.3,28.1,,,,,,National survey,Second All India Survey 
+IND ,356,India,,,1988,1988,15-44,HW,44.9,39.9,,,,,,National survey,Third All India Survey 
+IND ,356,India,,,1992,1993,15-49,MW,40.7,36.5,,,,,20.3,DHS,National Family Health Survey 1992-1993
+IND ,356,India,,,1998,1999,15-49,MW,48.2,42.8,Excluding the state of Tripura.,,,,16.1,DHS,National Family Health Survey 1998-1999
+IND ,356,India,,,2000,2000,15-49,MW,46.9,42.3,,,,,,MICS2,India Multiple Indicator Survey 2000
+IND ,356,India,,,2002,2004,15-44,MW,53,45.7,,,,,21.1,National survey,District Level Household Survey on Reproductive and Child Health 2002-2004
+IND ,356,India,,,2005,2006,15-49,MW,56.3,48.5,,,,Including folk methods.,13.9,DHS,National Family Health Survey 2005-2006
+IND ,356,India,,,2007,2008,15-49,MW,54.8,48.1,,,,,20.5,National survey,"District Level Household and Facility Survey (DLHS-3), 2007-08: India."
+IND ,356,India,,1,1980,1980,15-49,MW,,24.4,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1985,1985,15-49,MW,,38.7,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1990,1990,15-49,MW,,49.6,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1991,1991,15-49,MW,,48.6,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1992,1992,15-49,MW,,48.7,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1993,1993,15-49,MW,,51.3,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1994,1994,15-49,MW,,51.6,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1995,1995,15-49,MW,,52.2,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1996,1996,15-49,MW,,51,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1997,1997,15-49,MW,,50.8,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1998,1998,15-49,MW,,48.6,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,1999,1999,15-49,MW,,51.9,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2000,2000,15-49,MW,,51.3,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2001,2001,15-49,MW,,51.1,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2002,2002,15-49,MW,,53.7,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2003,2003,15-49,MW,,54.1,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2004,2004,15-49,MW,,53.1,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2005,2005,15-49,MW,,54,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2006,2006,15-49,MW,,53.6,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2007,2007,15-49,MW,,53.7,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2008,2008,15-49,MW,,48.1,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2009,2009,15-49,MW,,46.1,,,,,,Service statistics,Service statistics
+IND ,356,India,,1,2010,2010,15-49,MW,,44.6,,,,,,Service statistics,Service statistics
+XXX,999,,Uttar Pradesh,,1970,1970,15-44,HW,13.6,9.5,,,,,,National survey,First All India Survey 
+XXX,999,,Uttar Pradesh,,1980,1980,15+,HW,35.3,28.1,,,,,,National survey,Second All India Survey 
+XXX,999,,Uttar Pradesh,,1988,1988,15-44,HW,44.9,39.9,,,,,,National survey,Third All India Survey 

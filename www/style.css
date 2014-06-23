@@ -1,0 +1,91 @@
+/*
+Description: Fixed width for sidebarPanel, while tabsetPanel fills up the rest of the window.
+Source: Kirill Savin
+URL: https://groups.google.com/forum/#!searchin/shiny-discuss/tag/shiny-discuss/3m7cq96mcBY/OEICaO_7Na0J
+*/
+/*
+.row-fluid {
+    padding-left: 275px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.row-fluid .span12 {
+    position: relative;
+    float: left;
+    width: 500px;
+    height: 60px;
+    right: 285px;
+    margin-right: -275px;
+}
+.row-fluid .span4 { 
+    position: relative;
+    float: left;
+    width: 275px;
+    right: 285px;
+    margin-right: -275px;
+}
+.row-fluid .span8 {
+    position: relative;
+    float: right;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+}
+*/
+
+.well { 
+    padding-left: 5px;
+    padding-right: 5px; 
+    padding-top: 5px; 
+    padding-bottom: 5px; 
+    margin-bottom: 5px; 
+    width: auto; 
+}
+textarea, .jslider, select {
+    width: 100%;
+}
+input {
+    width: 200px;
+}
+/**************************************************/
+/*
+ * Table
+*/
+table.dataTable {
+  font-size: 11px;
+}
+table.dataTable tbody td {
+  text-align: center;
+}
+/*
+ * Table wrapper
+ */
+.dataTables_wrapper {
+  font-size: 11px;
+}
+/*
+ * Page length menu
+ */
+.dataTables_length,
+.dataTables_length label,
+.dataTables_length select {
+  font-size: 11px;
+  float: left;
+}
+.dataTables_length select {
+  width: 75px;
+}
+/*
+ * Filter
+ */
+.dataTables_filter,
+.dataTables_filter label,
+.dataTables_filter input {
+	font-size: 11px;
+}
+/*
+ * Table information
+ */
+.dataTables_info {
+  font-size: 11px;
+}
