@@ -41,10 +41,10 @@ getISOs <- reactive({
         data <- read.csv(file = getFilePath(), header = T, stringsAsFactors = F)
         names(data)[grepl("Country.letter.code|Country..letter.code", names(data))] <- "Country..letter.code" # change JR, 20140331
         # change JR, 20140409
-        country.table <-  unique(data.frame(iso = gsub(" ", "", as.character(data$Country..letter.code)),
-                                            name = as.character(ifelse(is.na(data$New.population) | data$New.population == "", 
-                                                                       data$Country, data$New.population)), 
-                                            stringsAsFactors = F))
+        country.table <- unique(data.frame(iso = gsub(" ", "", as.character(data$Country..letter.code)),
+                                           name = as.character(ifelse(is.na(data$New.population) | data$New.population == "", 
+                                                                      data$Country, data$New.population)), 
+                                           stringsAsFactors = F))
         iso.c <- country.table$iso
         name.c <- country.table$name 
       }
@@ -89,6 +89,30 @@ getISOs <- reactive({
   iso.c <- c("???", iso.c)
   names(iso.c) <- c("Please select country/population", name.c)
   return(iso.c)
+})
+#----------------------------------------------------------------------
+getRegions <- reactive({
+  regions <- NULL
+  if (input$chooseAction == "viewrun" & !is.null(input$runnameExisting)) {
+    if (input$runnameExisting == getRunnameUNPD()$run.name) {
+      regions <- c("World", "FP2020 countries",
+                   "Developed countries", "Developing countries", "Developing (excl. China)",
+                   "Africa", "Asia", "Europe", 
+                   "Latin America and the Caribbean", "Oceania",                 
+                   "Eastern Africa", "Middle Africa", "Northern Africa", 
+                   "Southern Africa", "Western Africa", 
+                   "Central Asia", "Eastern Asia", "South-Eastern Asia",
+                   "Southern Asia", "Western Asia",
+                   "Eastern Europe", "Northern Europe",
+                   "Southern Europe", "Western Europe",
+                   "Central America", "Northern America", "South America", "Caribbean", 
+                   "Australia and New Zealand",                   
+                   "Mela-Micro-Polynesia", 
+                   "Melanesia", "Micronesia", "Polynesia")
+      names(regions) <- regions
+    } 
+  }
+  return(regions)
 })
 #----------------------------------------------------------------------
 # To check if runname is a duplicate # change JR, 20140418

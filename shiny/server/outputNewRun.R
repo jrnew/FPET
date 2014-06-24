@@ -611,6 +611,89 @@ output$targetPanel4 <- renderUI ({
   )
 })
 #----------------------------------------------------------------------
+output$changeOutput <- renderText({ # change JR, 20140623
+  if (is.null(input$isoselect)) return(NULL)
+  if (input$isoselect == "???") return(NULL)
+  withProgress(session, min=0, max=100, expr={
+    setProgress(message = 'Loading', detail = 'Please wait...',
+                value = 40)
+    if (is.null(input$indicatorc) | is.null(input$year1c) | is.null(input$year2c))
+      return(NULL)
+    change <- GetChangeFromYear1ToYear2(run.name = getRunName(),
+                                        iso.select = getUNCode(run.name = getRunName(),
+                                                        iso = gsub(" ", "", input$isoselect)), 
+                                        indicator = input$indicatorc, 
+                                        year1 = input$year1c+0.5, year2 = input$year2c+0.5)
+    P.uis <- round(quantile(change$P.s, probs = percentiles.for.change)*100, digits = 1)
+    paste0(P.uis[2], "% (", P.uis[1], "%, ", P.uis[3], "%)")
+  })
+})
+#----------------------------------------------------------------------
+output$changewOutput <- renderText({ # change JR, 20140623
+  if (is.null(input$isoselect)) return(NULL)
+  if (input$isoselect == "???") return(NULL)
+  withProgress(session, min=0, max=100, expr={
+    setProgress(message = 'Loading', detail = 'Please wait...',
+                value = 40)
+    if (is.null(input$indicatorcw) | is.null(input$year1cw) | is.null(input$year2cw))
+      return(NULL)
+    change <- GetChangeFromYear1ToYear2(run.name = getRunName(),
+                                        iso.select = getUNCode(run.name = getRunName(),
+                                                        iso = gsub(" ", "", input$isoselect)), 
+                                        indicator = input$indicatorcw, 
+                                        year1 = input$year1cw+0.5, year2 = input$year2cw+0.5)
+    WP.uis <- round(quantile(change$WP.s, probs = percentiles.for.change)*1000, digits = 0)
+    paste0(WP.uis[2], " (", WP.uis[1], ", ", WP.uis[3], ")")
+  })
+})
+#----------------------------------------------------------------------
+output$progressPanel1 <- renderUI ({
+  wellPanel(
+    p("The change in "),
+    selectInput("indicatorc", "",
+                choices = c("total CP" = "Total", 
+                            "modern CP" = "Modern", 
+                            "traditional CP" = "Traditional", 
+                            "unmet need in FP" = "Unmet",
+                            "total demand in FP" = "TotalPlusUnmet", 
+                            "demand in FP (excl modern)" = "TradPlusUnmet" 
+                            # , "met demand in FP" = "Met Demand"
+                ), selected = "Total", selectize = FALSE),
+    br(" from the year "),
+    numericInput("year1c", "", 2012, 
+                 min = 1990, max = 2015, step = 1),
+    br(" to the year "),
+    numericInput("year2c", "", 2015, 
+                 min = 1990, max = 2015, step = 1),
+    br(" is "),
+    strong(textOutput("changeOutput"))
+  )
+})
+#----------------------------------------------------------------------
+output$progressPanel2 <- renderUI ({
+  wellPanel(
+    p("The change in the number of women"),
+    selectInput("indicatorcw", "",
+                choices = c("on any contraception" = "Total", 
+                            "on modern contraception" = "Modern", 
+                            "on traditional contraception" = "Traditional", 
+                            "with unmet need in FP" = "Unmet",
+                            "with demand in FP" = "TotalPlusUnmet", 
+                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
+                            # , "with met demand in FP" = "Met Demand"
+                ), selected = "Total", selectize = FALSE),
+    br(" from the year "),
+    numericInput("year1cw", "", 2012, 
+                 min = 1990, max = 2015, step = 1),
+    br(" to the year "),
+    numericInput("year2cw", "", 2015, 
+                 min = 1990, max = 2015, step = 1),
+    br(" is "),
+    strong(textOutput("changewOutput"))
+  )
+})
+#----------------------------------------------------------------------
+# UIs
 output$resultsViewChart <- renderUI({
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
@@ -676,4 +759,16 @@ output$targetPanelAll <- renderUI ({
       div(class = "span4", uiOutput("targetPanel3")),
       div(class = "span4", uiOutput("targetPanel4"))
     ))
+})
+#----------------------------------------------------------------------
+output$progressPanelAll <- renderUI({
+  if (input$startRun == 0) return(NULL)
+  if (is.null(RunMCMCAndGetResults())) return(NULL)
+  div(
+    h4("Information for measuring progress"),
+    fluidRow(
+      div(class = "span4", uiOutput("progressPanel1")), 
+      div(class = "span4", uiOutput("progressPanel2"))
+    )
+  )
 })

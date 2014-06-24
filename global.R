@@ -32,6 +32,11 @@ Rfiles <- list.files(file.path(getwd(), "R"))
 Rfiles <- Rfiles[grepl(".R", Rfiles)]
 sapply(paste0("R/", Rfiles), source)
 #----------------------------------------------------------------------
+percentiles.for.change <- c(0.025, 0.5, 0.975)
+country.info.file <- "data/Country-and-area-classification-inclFP2020.csv"
+country.info.inclFP2020 <- read.csv(country.info.file, header = T, stringsAsFactors = F, strip.white = T)
+countrycodes.FP2020 <- paste0(country.info.inclFP2020$ISO.Code[country.info.inclFP2020$FP2020 == "Yes"])
+#----------------------------------------------------------------------
 getRunnameUNPD <- function() {
   run.name <- "Run20140520" # change JR, 20140612
   return(list(name = "UNPD 2014", run.name = run.name))

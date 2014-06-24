@@ -34,6 +34,8 @@ mainPanel(
                uiOutput("resultsPlotChart")),
       tabPanel("Targets",
                uiOutput("targetPanelAll")),
+      tabPanel("Progress",
+               uiOutput("progressPanelAll")),
       tabPanelAbout()
     )
   ), # end conditionalPanel for newrun
@@ -53,6 +55,8 @@ mainPanel(
                uiOutput("resultsPlotExistingChart")),
       tabPanel("Targets",
                uiOutput("targetPanelExistingAll")),
+      tabPanel("Progress",
+               uiOutput("progressPanelExistingAll")),
       tabPanelAbout()
     )
   ), # end conditionalPanel for viewrun

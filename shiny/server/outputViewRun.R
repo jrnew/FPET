@@ -447,6 +447,151 @@ output$targetPanelExisting4 <- renderUI ({
   )
 })
 #----------------------------------------------------------------------
+output$changeOutputExisting <- renderText({ # change JR, 20140623
+  if (is.null(input$areacview)) return(NULL)
+  if (input$areacview == "???") return(NULL)
+  withProgress(session, min=0, max=100, expr={
+    setProgress(message = 'Loading', detail = 'Please wait...',
+                value = 40)
+    if (is.null(input$indicatorcview) | is.null(input$year1cview) | is.null(input$year2cview))
+      return(NULL)
+    if (input$areacview %in% getISOs()) {
+      change <- GetChangeFromYear1ToYear2(run.name = input$runnameExisting,
+                                          iso.select = getUNCode(run.name = input$runnameExisting,
+                                                          iso = gsub(" ", "", input$areacview)), 
+                                          indicator = input$indicatorcview, 
+                                          year1 = input$year1cview+0.5, year2 = input$year2cview+0.5)
+      P.uis <- round(quantile(change$P.s, probs = percentiles.for.change)*100, digits = 1)
+      paste0(P.uis[2], "% (", P.uis[1], "%, ", P.uis[3], "%)")
+    } else if (input$areacview %in% getRegions() & input$runnameExisting == getRunnameUNPD()$run.name) {
+      output.dir <- file.path("output", input$runnameExisting)
+      load(file.path(output.dir, "mcmc.meta.rda"))
+      load(file.path(output.dir, "countrytrajectories", paste0("P.tp3s_country", 1, ".rda")))
+      iso.c <- mcmc.meta$data.raw$country.info$iso.c
+      if (input$areacview == "FP2020 countries") {
+        select.c <- iso.c %in% countrycodes.FP2020
+      } else {
+        select.c <- SelectCountriesInRegion(region.name = input$areacview,
+                                            country.info = mcmc.meta$data.raw$country.info,
+                                            region.info = mcmc.meta$data.raw$region.info)
+      }
+      n.sim <- dim(P.tp3s)[3]
+      P.cs <- array(NA, dim = c(sum(select.c), n.sim))
+      for (i in 1:sum(select.c)) {
+        change <- GetChangeFromYear1ToYear2(run.name = input$runnameExisting,
+                                            iso.select = gsub(" ", "", iso.c[select.c][i]),  
+                                            indicator = input$indicatorcview, 
+                                            year1 = input$year1cview+0.5, year2 = input$year2cview+0.5)
+        P.cs[i, ] <- change$P.s
+        setProgress(message = 'Loading', detail = 'Please wait...',
+                    value = 40+50*i/sum(select.c))
+      }
+      P.uis <- round(quantile(colSums(P.cs), probs = percentiles.for.change)*100, digits = 1)
+      paste0(P.uis[2], "% (", P.uis[1], "%, ", P.uis[3], "%)")
+    } else {
+      NULL
+    }
+  })
+})
+#----------------------------------------------------------------------
+output$changewOutputExisting <- renderText({ # change JR, 20140623
+  if (is.null(input$areacwview)) return(NULL)
+  if (input$areacwview == "???") return(NULL)
+  withProgress(session, min=0, max=100, expr={
+    setProgress(message = 'Loading', detail = 'Please wait...',
+                value = 40)
+    if (is.null(input$indicatorcwview) | is.null(input$year1cwview) | is.null(input$year2cwview))
+      return(NULL)
+    if (input$areacwview %in% getISOs()) {
+      change <- GetChangeFromYear1ToYear2(run.name = input$runnameExisting,
+                                          iso.select = getUNCode(run.name = input$runnameExisting,
+                                                          iso = gsub(" ", "", input$areacwview)), 
+                                          indicator = input$indicatorcwview, 
+                                          year1 = input$year1cwview+0.5, year2 = input$year2cwview+0.5)
+      WP.uis <- round(quantile(change$WP.s, probs = percentiles.for.change)*1000, digits = 0)
+      paste0(WP.uis[2], " (", WP.uis[1], ", ", WP.uis[3], ")")
+    } else if (input$areacwview %in% getRegions() & input$runnameExisting == getRunnameUNPD()$run.name) {
+      load(file.path(output.dir, "mcmc.meta.rda"))
+      load(file.path(output.dir, "countrytrajectories", paste0("P.tp3s_country", 1, ".rda")))
+      iso.c <- mcmc.meta$data.raw$country.info$iso.c
+      if (input$areacwview == "FP2020 countries") {
+        select.c <- iso.c %in% countrycodes.FP2020
+      } else {
+        select.c <- SelectCountriesInRegion(region.name = input$areacwview,
+                                            country.info = mcmc.meta$data.raw$country.info,
+                                            region.info = mcmc.meta$data.raw$region.info)
+      }
+      n.sim <- dim(P.tp3s)[3]
+      WP.cs <- array(NA, dim = c(sum(select.c), n.sim))
+      for (i in 1:sum(select.c)) {
+        change <- GetChangeFromYear1ToYear2(run.name = input$runnameExisting,
+                                            iso.select = gsub(" ", "", iso.c[select.c][i]), 
+                                            indicator = input$indicatorcwview, 
+                                            year1 = input$year1cwview+0.5, year2 = input$year2cwview+0.5)
+        WP.cs[i, ] <- change$WP.s  
+        setProgress(message = 'Loading', detail = 'Please wait...',
+                    value = 40+50*i/sum(select.c))
+      }
+      WP.uis <- round(quantile(colSums(WP.cs), probs = percentiles.for.change)*1000, digits = 0)
+      paste0(WP.uis[2], " (", WP.uis[1], ", ", WP.uis[3], ")")
+    } else {
+      NULL
+    }
+  })
+})
+#----------------------------------------------------------------------
+output$progressPanelExisting1 <- renderUI ({
+  wellPanel(
+    p("The change in "),
+    selectInput("indicatorcview", "",
+                choices = c("total CP" = "Total", 
+                            "modern CP" = "Modern", 
+                            "traditional CP" = "Traditional", 
+                            "unmet need in FP" = "Unmet",
+                            "total demand in FP" = "TotalPlusUnmet", 
+                            "demand in FP (excl modern)" = "TradPlusUnmet" 
+                            # , "met demand in FP" = "Met Demand"
+                ), selected = "Total", selectize = FALSE),
+    br(" from the year "),
+    numericInput("year1cview", "", 2012, 
+                 min = 1990, max = 2015, step = 1),
+    br(" to the year "),
+    numericInput("year2cview", "", 2015, 
+                 min = 1990, max = 2015, step = 1),
+    br( " for "),
+    selectInput("areacview", "",
+                choices = c(getISOs()[1], getRegions(), getISOs()[-1]), selectize = FALSE),
+    br(" is "),
+    strong(textOutput("changeOutputExisting"))
+  )
+})
+#----------------------------------------------------------------------
+output$progressPanelExisting2 <- renderUI ({
+  wellPanel(
+    p("The change in the number of women"),
+    selectInput("indicatorcwview", "",
+                choices = c("on any contraception" = "Total", 
+                            "on modern contraception" = "Modern", 
+                            "on traditional contraception" = "Traditional", 
+                            "with unmet need in FP" = "Unmet",
+                            "with demand in FP" = "TotalPlusUnmet", 
+                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
+                            # , "with met demand in FP" = "Met Demand"
+                ), selected = "Total", selectize = FALSE),
+    br(" from the year "),
+    numericInput("year1cwview", "", 2012, 
+                 min = 1990, max = 2015, step = 1),
+    br(" to the year "),
+    numericInput("year2cwview", "", 2015, 
+                 min = 1990, max = 2015, step = 1),
+    br( " for "),
+    selectInput("areacwview", "",
+                choices = c(getISOs()[1], getRegions(), getISOs()[-1]), selectize = FALSE),
+    br(" is "),
+    strong(textOutput("changewOutputExisting"))
+  )
+})
+#----------------------------------------------------------------------
 # UIs
 output$countryDataExistingChart <- renderUI({
   if (input$chooseAction != "viewrun") return(NULL)
@@ -535,6 +680,19 @@ output$targetPanelExistingAll <- renderUI({
     fluidRow(
       div(class = "span4", uiOutput("targetPanelExisting3")),
       div(class = "span4", uiOutput("targetPanelExisting4"))
+    )
+  )
+})
+output$progressPanelExistingAll <- renderUI({
+  if (input$chooseAction != "viewrun") return(NULL)
+  if (is.null(input$runnameExisting)) return(NULL)
+  if (input$runnameExisting == "NULL") return(NULL)
+  # if (input$isoselectview == "???") return(NULL)
+  div(
+    h4("Information for measuring progress"),
+    fluidRow(
+      div(class = "span4", uiOutput("progressPanelExisting1")), 
+      div(class = "span4", uiOutput("progressPanelExisting2"))
     )
   )
 })
