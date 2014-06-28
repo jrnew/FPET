@@ -20,8 +20,8 @@
 # 3. Run code below. App will open in browser.
 rm(list = ls())
 require(shiny)
-workdir <- "D:/Dropbox/CP1countryruns/FPET"
-setwd(workdir)
+work.dir <- "D:/Dropbox/CP1countryruns/FPET"
+setwd(work.dir)
 runApp(getwd(), port = 8888)
 #----------------------------------------------------------------------
 # devtools::install_github('rstudio/shinyapps')
