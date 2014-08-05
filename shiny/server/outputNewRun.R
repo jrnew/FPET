@@ -197,13 +197,14 @@ readInMWRAData <- reactive({
   } else {
     return(NULL)
   }
-  data.MWRA <- read.csv(file = data.MWRA.file, header = T, stringsAsFactors = F)
+  data.MWRA <- read.csv(file = data.MWRA.file, header = T, stringsAsFactors = F, strip.white = T)
   names(data.MWRA)[grepl("Country.letter.code|Country..letter.code", names(data.MWRA))] <- "Country.letter.code" # change JR, 2014015
   if (is.null(data.MWRA$New.population))
     data.MWRA$New.population <- rep(NA, nrow(data.MWRA)) # change JR, 20140412
   data.MWRA$Country <- ifelse(is.na(data.MWRA$New.population) | data.MWRA$New.population == "", 
                               data.MWRA$Country, data.MWRA$New.population) # change JR, 20140409
-  data.MWRA.long <- melt(data.MWRA, id.vars = c("Country.letter.code", "ISO.code", "Country"),  
+  data.MWRA.long <- melt(data.MWRA[, colnames(data.MWRA) != "New.population"], 
+                         id.vars = c("Country.letter.code", "ISO.code", "Country"),  
                          variable.name = "Year", value.name = "MWRA")
   data.MWRA.long$Year <- gsub("X", "", data.MWRA.long$Year)
   # data.MWRA.long$Year <- as.numeric(as.character(data.MWRA.long$Year)) + 0.5

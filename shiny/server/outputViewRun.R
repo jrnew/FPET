@@ -511,6 +511,7 @@ output$changewOutputExisting <- renderText({ # change JR, 20140623
       WP.uis <- round(quantile(change$WP.s, probs = percentiles.for.change)*1000, digits = 0)
       paste0(WP.uis[2], " (", WP.uis[1], ", ", WP.uis[3], ")")
     } else if (input$areacwview %in% getRegions() & input$runnameExisting == getRunnameUNPD()$run.name) {
+      output.dir <- file.path("output", input$runnameExisting)
       load(file.path(output.dir, "mcmc.meta.rda"))
       load(file.path(output.dir, "countrytrajectories", paste0("P.tp3s_country", 1, ".rda")))
       iso.c <- mcmc.meta$data.raw$country.info$iso.c
