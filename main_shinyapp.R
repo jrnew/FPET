@@ -26,11 +26,18 @@ runApp(getwd(), port = 8888)
 #----------------------------------------------------------------------
 # devtools::install_github('rstudio/shinyapps')
 require(shinyapps)
+require(RPushbullet)
 shinyapps::setAccountInfo(name="jrnew", token="A45DC21747C8D970327E9FE8CCABB461", 
                           secret="Sufbe3CH7XxvbMf1qHvrocVvlgAnrn+Wi4CbVUMF")
 # sessionInfo()
 # options(shinyapps.http.trace = TRUE) # for log to trace error
 deployApp()
+Y
+pbPost(type = "note", 
+       title = "Hoorah!", 
+       body = "FPET app deployed successfully!",
+       deviceind = 1)
+
 # shinyapps::configureApp("FPET", size="xxlarge") # change instance type of app
 # debug
 # shinyapps::appDependencies()
