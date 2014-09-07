@@ -58,6 +58,13 @@ RunMCMCAndGetResults <- reactive({
         MWRA.csv.file <- input$MWRAfile$datapath
       }
       regioninfo.csv <- "data/Country-and-area-classification.csv"
+      # check if do.SS.run
+      data.preprocessed <- PreprocessData(data.csv = data.csv.file,
+                                          iso.select = iso.select)
+      select.ss <- grepl("Service statistic", data.preprocessed$Data.series.type)
+      do.SS.run <- any(select.ss)
+      if (do.SS.run & sum(select.ss) == 1) 
+        stop(paste0("Only 1 observation of SS data is available. Not possible to use SS data for projection."))
       setProgress(message = 'Run is in progress', detail = 'Please wait...',
                   value = 1)
       #----------------------------------------------------------------------
@@ -65,24 +72,82 @@ RunMCMCAndGetResults <- reactive({
       print(paste0("Running in parallel? ", # change JR, 20140402
                    ifelse(getDoParWorkers() == 1,  "No.", paste0("Yes, with ", getDoParWorkers(), " cores."))))
       if (input$shortRun) {
-        RunMCMC(run.name = run.name, 
-                do.country.specific.run = TRUE,
-                iso.select = iso.select, 
-                iso.country.select = iso.country.select, # change JR, 20140409
-                run.name.global = run.name.global,
-                data.csv = data.csv.file, 
-                regioninfo.csv = regioninfo.csv,
-                run.on.server = run.on.server,
-                N.ITER = 10, N.STEPS = 2, N.THIN = 1, N.BURNIN = 0, ChainNums = seq(1,3))
+        if (!do.SS.run) {
+          RunMCMC(run.name = run.name, 
+                  do.country.specific.run = TRUE,
+                  iso.select = iso.select, 
+                  iso.country.select = iso.country.select,
+                  run.name.global = run.name.global,
+                  data.csv = data.csv.file, 
+                  regioninfo.csv = regioninfo.csv,
+                  run.on.server = run.on.server,
+                  N.ITER = 10, N.STEPS = 2, N.THIN = 1, N.BURNIN = 0, ChainNums = seq(1,3))
+        } else {
+          message("Service statistics data is available.")
+          # First pass
+          RunMCMC(run.name = run.name, 
+                  do.country.specific.run = TRUE,
+                  iso.select = iso.select, 
+                  iso.country.select = iso.country.select,
+                  run.name.global = run.name.global,
+                  data.csv = data.csv.file, 
+                  regioninfo.csv = regioninfo.csv,
+                  run.on.server = run.on.server,
+                  N.ITER = 10, N.STEPS = 2, N.THIN = 1, N.BURNIN = 0, ChainNums = seq(1,3))
+          ConstructMCMCArray(run.name = run.name, do.SS.run.first.pass = TRUE)
+          ConstructOutput(run.name = run.name,
+                          MWRA.csv = MWRA.csv.file,
+                          start.year = 1970.5, end.year = 2035.5, # change to shorter period including year required to estimate bias.modern to speed up?
+                          do.SS.run.first.pass = TRUE)
+          #----------------------------------------------------------------------
+          # Second pass
+          RunMCMC(run.name = run.name, 
+                  do.country.specific.run = TRUE,
+                  iso.select = iso.select, 
+                  iso.country.select = iso.country.select,
+                  run.name.global = run.name.global,
+                  data.csv = data.csv.file, 
+                  regioninfo.csv = regioninfo.csv,
+                  run.on.server = run.on.server,
+                  N.ITER = 10, N.STEPS = 2, N.THIN = 1, N.BURNIN = 0, ChainNums = seq(1,3))
+        }
       } else {
-        RunMCMC(run.name = run.name, 
-                do.country.specific.run = TRUE,
-                iso.select = iso.select, 
-                iso.country.select = iso.country.select, # change JR, 20140409
-                run.name.global = run.name.global,
-                data.csv = data.csv.file, 
-                run.on.server = run.on.server,
-                regioninfo.csv = regioninfo.csv)
+        if (!do.SS.run) {
+          RunMCMC(run.name = run.name, 
+                  do.country.specific.run = TRUE,
+                  iso.select = iso.select, 
+                  iso.country.select = iso.country.select,
+                  run.name.global = run.name.global,
+                  data.csv = data.csv.file, 
+                  regioninfo.csv = regioninfo.csv,
+                  run.on.server = run.on.server)
+        } else {
+          message("Service statistics data is available.")
+          # First pass
+          RunMCMC(run.name = run.name, 
+                  do.country.specific.run = TRUE,
+                  iso.select = iso.select, 
+                  iso.country.select = iso.country.select,
+                  run.name.global = run.name.global,
+                  data.csv = data.csv.file, 
+                  regioninfo.csv = regioninfo.csv,
+                  run.on.server = run.on.server)
+          ConstructMCMCArray(run.name = run.name, do.SS.run.first.pass = TRUE)
+          ConstructOutput(run.name = run.name,
+                          MWRA.csv = MWRA.csv.file,
+                          start.year = 1970.5, end.year = 2035.5, # change to shorter period including year required to estimate bias.modern to speed up?
+                          do.SS.run.first.pass = TRUE)
+          #----------------------------------------------------------------------
+          # Second pass
+          RunMCMC(run.name = run.name, 
+                  do.country.specific.run = TRUE,
+                  iso.select = iso.select, 
+                  iso.country.select = iso.country.select,
+                  run.name.global = run.name.global,
+                  data.csv = data.csv.file, 
+                  regioninfo.csv = regioninfo.csv,
+                  run.on.server = run.on.server)
+        }
       }
       setProgress(message = 'Run is in progress', detail = 'Reading output...',
                   value = 80)
@@ -471,14 +536,8 @@ output$targetPanel1 <- renderUI ({
   wellPanel(
     p("Q: What is the probability that "),
     selectInput("indicatorp", "",
-                choices = c("total CP" = "Total", 
-                            "modern CP" = "Modern", 
-                            "traditional CP" = "Traditional", 
-                            "unmet need in FP" = "Unmet",
-                            "total demand in FP" = "TotalPlusUnmet", 
-                            "demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = indicator.labels, 
+                selected = "Total", selectize = FALSE),
     br(" in the year "),
     numericInput("yearp", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -501,14 +560,8 @@ output$targetPanel2 <- renderUI ({
   wellPanel(
     p("Q: What target value of "),
     selectInput("indicatorpp", "",
-                choices = c("total CP" = "Total", 
-                            "modern CP" = "Modern", 
-                            "traditional CP" = "Traditional", 
-                            "unmet need in FP" = "Unmet",
-                            "total demand in FP" = "TotalPlusUnmet", 
-                            "demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = indicator.labels, 
+                selected = "Total", selectize = FALSE),
     br(" in the year "),
     numericInput("yearpp", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -540,18 +593,12 @@ output$targetPanel3 <- renderUI ({
     conditionalPanel(
       condition = "input.selectwomenpw == 'add'",
       br("(relative to the year "),
-      numericInput("yearstartpw", "", 2012, 
+      numericInput("yearstartpw", "", 2013, 
                    min = 1990, max = 2020, step = 1),
       br(")")),
     selectInput("indicatorpw", "",
-                choices = c("on any contraception" = "Total", 
-                            "on modern contraception" = "Modern", 
-                            "on traditional contraception" = "Traditional", 
-                            "with unmet need in FP" = "Unmet",
-                            "with demand in FP" = "TotalPlusUnmet", 
-                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "with met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = head(indicator.count.labels, length(indicator.count.labels)-2), 
+                selected = "Total", selectize = FALSE),
     br(" in the year "),
     numericInput("yearpw", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -580,18 +627,12 @@ output$targetPanel4 <- renderUI ({
     conditionalPanel(
       condition = "input.selectwomenppw == 'add'",
       br("(relative to the year "),
-      numericInput("yearstartppw", "", 2012, 
+      numericInput("yearstartppw", "", 2013, 
                    min = 1990, max = 2020, step = 1),
       br(")")),
     selectInput("indicatorppw", "",
-                choices = c("on any contraception" = "Total", 
-                            "on modern contraception" = "Modern", 
-                            "on traditional contraception" = "Traditional", 
-                            "with unmet need in FP" = "Unmet",
-                            "with demand in FP" = "TotalPlusUnmet", 
-                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "with met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = head(indicator.count.labels, length(indicator.count.labels)-2), 
+                selected = "Total", selectize = FALSE),
     br(" in the year "),
     numericInput("yearppw", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -612,7 +653,7 @@ output$targetPanel4 <- renderUI ({
   )
 })
 #----------------------------------------------------------------------
-output$changeOutput <- renderText({ # change JR, 20140623
+output$changeOutput <- renderText({
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
   withProgress(session, min=0, max=100, expr={
@@ -652,16 +693,10 @@ output$progressPanel1 <- renderUI ({
   wellPanel(
     p("The change in "),
     selectInput("indicatorc", "",
-                choices = c("total CP" = "Total", 
-                            "modern CP" = "Modern", 
-                            "traditional CP" = "Traditional", 
-                            "unmet need in FP" = "Unmet",
-                            "total demand in FP" = "TotalPlusUnmet", 
-                            "demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = indicator.labels, 
+                selected = "Total", selectize = FALSE),
     br(" from the year "),
-    numericInput("year1c", "", 2012, 
+    numericInput("year1c", "", 2013, 
                  min = 1990, max = 2020, step = 1),
     br(" to the year "),
     numericInput("year2c", "", 2020, 
@@ -675,16 +710,10 @@ output$progressPanel2 <- renderUI ({
   wellPanel(
     p("The change in the number of women"),
     selectInput("indicatorcw", "",
-                choices = c("on any contraception" = "Total", 
-                            "on modern contraception" = "Modern", 
-                            "on traditional contraception" = "Traditional", 
-                            "with unmet need in FP" = "Unmet",
-                            "with demand in FP" = "TotalPlusUnmet", 
-                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "with met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = head(indicator.count.labels, length(indicator.count.labels)-2), 
+                selected = "Total", selectize = FALSE),
     br(" from the year "),
-    numericInput("year1cw", "", 2012, 
+    numericInput("year1cw", "", 2013, 
                  min = 1990, max = 2020, step = 1),
     br(" to the year "),
     numericInput("year2cw", "", 2020, 
@@ -708,14 +737,7 @@ output$resultsViewChart <- renderUI({
                       selected = "perc", selectize = FALSE)),
       div(class = "span3",
           selectInput("resultsIndicator", "Indicator to display",
-                      choices = c("Total CP" = "Total", 
-                                  "Modern CP" = "Modern", 
-                                  "Traditional CP" = "Traditional", 
-                                  "Unmet need in FP" = "Unmet",
-                                  "Total demand in FP" = "TotalPlusUnmet", 
-                                  "Demand in FP (excl modern)" = "TradPlusUnmet" 
-                                  # , "Met demand in FP" = "Met Demand"
-                      ),
+                      choices = indicator.labels,
                       selected = "Total", selectize = FALSE)),
       div(class = "span6", align = "right",
           downloadButton("downloadEstimates", "Download results"))

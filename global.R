@@ -10,8 +10,6 @@ if (run.on.server) {
   # change JR, 20140402
   library(doParallel)
   registerDoParallel(cores = detectCores())
-  # library(doMC)
-  # registerDoMC()
 }
 
 library(shiny)
@@ -36,6 +34,22 @@ percentiles.for.change <- c(0.025, 0.5, 0.975)
 country.info.file <- "data/Country-and-area-classification-inclFP2020.csv"
 country.info.inclFP2020 <- read.csv(country.info.file, header = T, stringsAsFactors = F, strip.white = T)
 countrycodes.FP2020 <- paste0(country.info.inclFP2020$ISO.Code[country.info.inclFP2020$FP2020 == "Yes"])
+indicator.labels <- c("Total CP" = "Total", 
+                      "Modern CP" = "Modern", 
+                      "Traditional CP" = "Traditional", 
+                      "Unmet need for FP" = "Unmet",
+                      "Unmet need for modern methods" = "TradPlusUnmet",
+                      "Total demand for FP" = "TotalPlusUnmet",
+                      "FP demand met" = "Met Demand",
+                      "FP demand met with modern methods" = "Met Demand with Modern Methods")
+indicator.count.labels <- c("on any contraception" = "Total", 
+                            "on modern contraception" = "Modern", 
+                            "on traditional contraception" = "Traditional", 
+                            "with unmet need for FP" = "Unmet",
+                            "with unmet need for modern methods" = "TradPlusUnmet",
+                            "with demand for FP" = "TotalPlusUnmet", 
+                            "with FP demand met" = "Met Demand",
+                            "with FP demand met with modern methods" = "Met Demand with Modern Methods")
 #----------------------------------------------------------------------
 getRunnameUNPD <- function() {
   run.name <- "Run20140520" # change JR, 20140612
@@ -66,7 +80,6 @@ subsetData <- function(
   if (any(check))
     stop(paste0("The following variables cannot be found in the data file: ", 
                 paste(vars[check], collapse = ", ")))
-  # change JR, 20140409
   if (is.null(name.country.select)) {
     data.output <- data.frame(Country = data$Country)
   } else {
@@ -122,11 +135,15 @@ outputResults <- function(
   return(results)
 }
 #----------------------------------------------------------------------
-getIndicatorLabel <- function(indicator) { # change JR, 20140402
-  indicator.labels <- c("Total CP", "Modern CP", "Traditional CP", "Unmet need in FP", 
-                        "Total demand in FP", "Demand in FP (excl modern)" )
-  names(indicator.labels) <- c("Total", "Modern", "Traditional", "Unmet", 
-                               "TotalPlusUnmet", "TradPlusUnmet")
+getIndicatorLabel <- function(indicator) {
+  indicator.labels <- c("Total CP", "Modern CP", "Traditional CP", 
+                        "Unmet need for FP", "Unmet need for modern methods",
+                        "Total demand for FP", 
+                        "FP demand met", "FP demand met with modern methods")
+  names(indicator.labels) <- c("Total", "Modern", "Traditional", 
+                               "Unmet", "TradPlusUnmet" ,
+                               "TotalPlusUnmet", 
+                               "Met Demand", "Met Demand with Modern Methods")
   return(indicator.labels[paste0(indicator)])
 }
 #----------------------------------------------------------------------
@@ -202,17 +219,20 @@ getPlotCategories <- function(type) {
                "Modern CP" = "Modern", 
                "Traditional CP" = "Traditional", 
                "Ratio of modern/total CP" = "Modern/Total", 
-               "Unmet need in FP" = "Unmet",
-               "Total demand in FP" = "TotalPlusUnmet", 
-               "Met demand in FP" = "Met Demand",
+               "Unmet need for modern methods" = "TradPlusUnmet",
+               "Total demand for FP" = "TotalPlusUnmet", 
+               "FP demand met with modern methods" = "Met Demand with Modern Methods"
+               "Unmet need for FP" = "Unmet",
+               "Total demand for FP" = "TotalPlusUnmet", 
+               "FP demand met" = "Met Demand",
                "Data details" = "Show Data")
-  selected <- c("Total", "Modern", "Traditional",
-                "Modern/Total", "Unmet", 
-                "TotalPlusUnmet", "Met Demand",
+  selected <- c("Total", "Modern", "Traditional", "Modern/Total", 
+                "TradPlusUnmet", "TotalPlusUnmet", "Met Demand with Modern Methods",
+                "Unmet", "TotalPlusUnmet", "Met Demand", 
                 "Show Data")
   if (type == "count") {
-    choices <- choices[-c(4, 7)]
-    selected <- selected[-c(4, 7)]
+    choices <- choices[-c(4, 6, 7, 10, 11)]
+    selected <- selected[-c(4, 6, 7, 10, 11)]
   }
   return(list(choices = choices, selected = selected))
 }

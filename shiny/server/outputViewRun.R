@@ -308,14 +308,8 @@ output$targetPanelExisting1 <- renderUI ({
   wellPanel(
     p("Q: What is the probability that "),
     selectInput("indicatorpview", "",
-                choices = c("total CP" = "Total", 
-                            "modern CP" = "Modern", 
-                            "traditional CP" = "Traditional", 
-                            "unmet need in FP" = "Unmet",
-                            "total demand in FP" = "TotalPlusUnmet", 
-                            "demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = indicator.labels, 
+                selected = "Total", selectize = FALSE),
     br(" in the year "),
     numericInput("yearpview", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -338,14 +332,8 @@ output$targetPanelExisting2 <- renderUI ({
   wellPanel(
     p("Q: What target value of "),
     selectInput("indicatorppview", "",
-                choices = c("total CP" = "Total", 
-                            "modern CP" = "Modern", 
-                            "traditional CP" = "Traditional", 
-                            "unmet need in FP" = "Unmet",
-                            "total demand in FP" = "TotalPlusUnmet", 
-                            "demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = indicator.labels, 
+                selected = "Total", selectize = FALSE),
     br(" in the year"),
     numericInput("yearppview", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -375,18 +363,12 @@ output$targetPanelExisting3 <- renderUI ({
     conditionalPanel(
       condition = "input.selectwomenpwview == 'add'",
       br("(relative to the year "),
-      numericInput("yearstartpwview", "", 2012, 
+      numericInput("yearstartpwview", "", 2013, 
                    min = 1990, max = 2020, step = 1),
       br(")")),
     selectInput("indicatorpwview", "",
-                choices = c("on any contraception" = "Total", 
-                            "on modern contraception" = "Modern", 
-                            "on traditional contraception" = "Traditional", 
-                            "with unmet need in FP" = "Unmet",
-                            "with demand in FP" = "TotalPlusUnmet", 
-                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "with met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = head(indicator.count.labels, length(indicator.count.labels)-2), 
+                selected = "Total", selectize = FALSE),
     br(" in the year "),
     numericInput("yearpwview", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -415,18 +397,12 @@ output$targetPanelExisting4 <- renderUI ({
     conditionalPanel(
       condition = "input.selectwomenppwview == 'add'",
       br("(relative to the year "),
-      numericInput("yearstartppwview", "", 2012, 
+      numericInput("yearstartppwview", "", 2013, 
                    min = 1990, max = 2020, step = 1),
       br(")")),
     selectInput("indicatorppwview", "",
-                choices = c("on any contraception" = "Total", 
-                            "on modern contraception" = "Modern", 
-                            "on traditional contraception" = "Traditional", 
-                            "with unmet need in FP" = "Unmet",
-                            "with demand in FP" = "TotalPlusUnmet", 
-                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "with met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = head(indicator.count.labels, length(indicator.count.labels)-2),
+                selected = "Total", selectize = FALSE),
     br(" in the year "),
     numericInput("yearppwview", "", 2020, 
                  min = 1990, max = 2020, step = 1),
@@ -476,17 +452,39 @@ output$changeOutputExisting <- renderText({ # change JR, 20140623
                                             region.info = mcmc.meta$data.raw$region.info)
       }
       n.sim <- dim(P.tp3s)[3]
-      P.cs <- array(NA, dim = c(sum(select.c), n.sim))
+      WP.year1.cs <- WP.year2.cs <- 
+        Pmet.year1.cs <- Pmet.year2.cs <- Pdemand.year1.cs <- Pdemand.year2.cs <- 
+        array(NA, dim = c(sum(select.c), n.sim))
+      MWRA.year1.c <- MWRA.year2.c <- rep(NA, sum(select.c))
       for (i in 1:sum(select.c)) {
         change <- GetChangeFromYear1ToYear2(run.name = input$runnameExisting,
                                             iso.select = gsub(" ", "", iso.c[select.c][i]),  
                                             indicator = input$indicatorcview, 
                                             year1 = input$year1cview+0.5, year2 = input$year2cview+0.5)
-        P.cs[i, ] <- change$P.s
+        if (!(input$indicatorcview %in% c("Met Demand", "Met Demand with Modern Methods"))) {
+          WP.year1.cs[i, ] <- change$WP.year1.s
+          WP.year2.cs[i, ] <- change$WP.year2.s
+        } else {
+          Pmet.year1.cs[i, ] <- change$Pmet.year1.s
+          Pmet.year2.cs[i, ] <- change$Pmet.year2.s
+          Pdemand.year1.cs[i, ] <- change$Pdemand.year1.s
+          Pdemand.year2.cs[i, ] <- change$Pdemand.year2.s
+        }
+        MWRA.year1.c[i] <- change$MWRA.year1
+        MWRA.year2.c[i] <- change$MWRA.year2
         setProgress(message = 'Loading', detail = 'Please wait...',
                     value = 40+50*i/sum(select.c))
       }
-      P.uis <- round(quantile(colSums(P.cs), probs = percentiles.for.change)*100, digits = 1)
+      if (!(input$indicatorcview %in% c("Met Demand", "Met Demand with Modern Methods"))) {
+        P.s <- colSums(WP.year2.cs)/sum(MWRA.year2.c) - colSums(WP.year1.cs)/sum(MWRA.year1.c)
+      } else {
+        WPmet.year1.s <- colSums(apply(Pmet.year1.cs, 2, "*", MWRA.year1.c))
+        WPmet.year2.s <- colSums(apply(Pmet.year2.cs, 2, "*", MWRA.year2.c)) 
+        WPdemand.year1.s <- colSums(apply(Pdemand.year1.cs, 2, "*", MWRA.year1.c))
+        WPdemand.year2.s <- colSums(apply(Pdemand.year2.cs, 2, "*", MWRA.year2.c)) 
+        P.s <- WPmet.year2.s/WPdemand.year2.s - WPmet.year1.s/WPdemand.year1.s
+      }
+      P.uis <- round(quantile(P.s, probs = percentiles.for.change)*100, digits = 1)
       paste0(P.uis[2], "% (", P.uis[1], "%, ", P.uis[3], "%)")
     } else {
       NULL
@@ -545,16 +543,10 @@ output$progressPanelExisting1 <- renderUI ({
   wellPanel(
     p("The change in "),
     selectInput("indicatorcview", "",
-                choices = c("total CP" = "Total", 
-                            "modern CP" = "Modern", 
-                            "traditional CP" = "Traditional", 
-                            "unmet need in FP" = "Unmet",
-                            "total demand in FP" = "TotalPlusUnmet", 
-                            "demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = indicator.labels,
+                selected = "Total", selectize = FALSE),
     br(" from the year "),
-    numericInput("year1cview", "", 2012, 
+    numericInput("year1cview", "", 2013, 
                  min = 1990, max = 2020, step = 1),
     br(" to the year "),
     numericInput("year2cview", "", 2020, 
@@ -571,16 +563,10 @@ output$progressPanelExisting2 <- renderUI ({
   wellPanel(
     p("The change in the number of women"),
     selectInput("indicatorcwview", "",
-                choices = c("on any contraception" = "Total", 
-                            "on modern contraception" = "Modern", 
-                            "on traditional contraception" = "Traditional", 
-                            "with unmet need in FP" = "Unmet",
-                            "with demand in FP" = "TotalPlusUnmet", 
-                            "with demand in FP (excl modern)" = "TradPlusUnmet" 
-                            # , "with met demand in FP" = "Met Demand"
-                ), selected = "Total", selectize = FALSE),
+                choices = head(indicator.count.labels, length(indicator.count.labels)-2),
+                selected = "Total", selectize = FALSE),
     br(" from the year "),
-    numericInput("year1cwview", "", 2012, 
+    numericInput("year1cwview", "", 2013, 
                  min = 1990, max = 2020, step = 1),
     br(" to the year "),
     numericInput("year2cwview", "", 2020, 
@@ -629,14 +615,7 @@ output$resultsViewExistingChart <- renderUI({
                         selected = "perc", selectize = FALSE)),
         div(class = "span3",
             selectInput("resultsIndicatorView", "Indicator to display",
-                        choices = c("Total CP" = "Total", 
-                                    "Modern CP" = "Modern", 
-                                    "Traditional CP" = "Traditional", 
-                                    "Unmet need in FP" = "Unmet",
-                                    "Total demand in FP" = "TotalPlusUnmet", 
-                                    "Demand in FP (excl modern)" = "TradPlusUnmet"
-                                    # , "Met demand in FP" = "Met Demand"
-                        ),
+                        choices = indicator.labels,
                         selected = "Total", selectize = FALSE)),
         div(class = "span6", align = "right",
             downloadButton("downloadEstimatesExisting", "Download results"))
@@ -652,7 +631,6 @@ output$resultsPlotExistingChart <- renderUI({
   if (input$isoselectview == "???") return(NULL)
   div(p(strong("Graph options")),
       fluidRow(
-        # change JR, 20140411
         div(class = "span3",
             selectInput("plotTypeView", "Result to display",
                         choices = c("Percentage" = "perc", 

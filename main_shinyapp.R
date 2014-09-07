@@ -4,7 +4,7 @@
 # 1. Install required software.
 #    a. Install R: http://www.r-project.org/
 #    b. Install JAGS: https://sourceforge.net/projects/mcmc-jags/files/ (Download JAGS-3.4.0.exe (31.7 MB))
-#    c. Install Rtools: http://cran.r-project.org/bin/windows/Rtools/
+#    c. Install Rtools: http://cran.r-project.org/bin/windows/Rtools/ (Skip this step for Mac OS)
 #    d. Download and unzip this file: https://dl.dropboxusercontent.com/u/38155136/FPET.zip 
 #    e. Open up R, and run this script: https://dl.dropboxusercontent.com/u/38155136/FPET.R 
 
@@ -20,7 +20,8 @@
 # 3. Run code below. App will open in browser.
 rm(list = ls())
 require(shiny)
-work.dir <- "D:/Dropbox/CP1countryruns/FPET"
+# work.dir <- "D:/Dropbox/CP1countryruns/FPET"
+work.dir <- "~/Dropbox/CP1countryruns/FPET"
 setwd(work.dir)
 runApp(getwd(), port = 8888)
 #----------------------------------------------------------------------

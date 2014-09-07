@@ -140,14 +140,7 @@ output$resultsViewComparisonChart <- renderUI({
                         selected = "perc", selectize = FALSE)),
         div(class = "span3",
             selectInput("resultsIndicatorCompare", "Indicator to display",
-                        choices = c("Total CP" = "Total", 
-                                    "Modern CP" = "Modern", 
-                                    "Traditional CP" = "Traditional", 
-                                    "Unmet need in FP" = "Unmet",
-                                    "Total demand in FP" = "TotalPlusUnmet", 
-                                    "Demand in FP (excl modern)" = "TradPlusUnmet"
-                                    # , "Met demand in FP" = "Met Demand"
-                        ),
+                        choices = head(indicator.labels, length(indicator.labels)-2),
                         selected = "Total", selectize = FALSE)),
         div(class = "span6", align = "right",
             downloadButton("downloadEstimatesComparison", "Download results"))
