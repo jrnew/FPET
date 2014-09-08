@@ -66,6 +66,10 @@ sidebarPanel(
       fluidRow(div(class = "span4", textInput("runname", "Run name:", "test")),
                div(class = "span8", shinyalert("duplicateRunAlert", click.hide = FALSE, auto.close.after = 5))), # change JR, 20140418
       checkboxInput("shortRun", "Do short run", TRUE),
+      sliderInput(inputId = "est.years", label = "Estimate years:",
+                  min = 1970, max = 2035, step = 1, 
+                  value = c(1990, 2020),
+                  format = "####"),
       fluidRow(div(class = "span3", actionButton("startRun", "Start run!", styleclass = "primary")), # change JR, 20140418
                div(class = "span8", shinyalert("startRunAlert", click.hide = FALSE, auto.close.after = 5))) # change JR, 20140418
     )

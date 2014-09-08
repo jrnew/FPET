@@ -3,7 +3,7 @@
 # Outputs and reactives for new run
 # Jin Rou New, 2014
 #----------------------------------------------------------------------
-# Start run alert # change JR, 20140418
+# Start run alert
 observe({
   if (input$startRun == 0) return()
   if (input$isoselect == "???") return(NULL)
@@ -11,7 +11,7 @@ observe({
   showshinyalert(session, id = "startRunAlert", HTMLtext = paste("Run started! Proceed to <em>Log</em> tab."))
 })
 
-# Duplicate run alert # change JR, 20140418
+# Duplicate run alert
 observe({
   if (input$startRun == 0) return()
   if (input$isoselect == "???") return(NULL)
@@ -156,8 +156,8 @@ RunMCMCAndGetResults <- reactive({
                   value = 82)
       ConstructOutput(run.name = run.name,
                       MWRA.csv = MWRA.csv.file,
-                      start.year = 1990.5, # change JR, 20140409
-                      end.year = 2020.5) # change JR, 20140409
+                      start.year = input$est.years[1] + 0.5,
+                      end.year = input$est.years[1] + 0.5)
       setProgress(message = 'Run complete!', value = 85)
       GetTablesRes(run.name = run.name, name.res = "Country")
       GetTablesChange(run.name = run.name, name.res = "Country")
@@ -318,7 +318,7 @@ output$resultsView <- renderDataTable({
   run.name <- getRunName()
   iso.select <- gsub(" ", "", input$isoselect)
   results <- outputResults(run.name = run.name, indicator = input$resultsIndicator, 
-                           type.is.prop = ifelse(input$resultsType == "perc", TRUE, FALSE), # change JR 20140401
+                           type.is.prop = ifelse(input$resultsType == "perc", TRUE, FALSE),
                            iso.select = iso.select)
   results
 }, options = list(aLengthMenu = c(5, 10, 20, 50), 
@@ -329,7 +329,7 @@ output$resultsView <- renderDataTable({
 # Show plot
 output$resultsPlot <- renderPlot({
   if (input$startRun == 0) {
-    EmptyPlot()
+    InternalPlotNull()
   } else {
     withProgress(session, min=0, max=100, expr={
       RunMCMCAndGetResults()
@@ -337,9 +337,9 @@ output$resultsPlot <- renderPlot({
                   value = 90)
       run.name <- getRunName()
       ShinyPlotResults(run.name = run.name,
-                       plot.prop = ifelse(input$plotType == "perc", TRUE, FALSE), # change JR, 20140411
-                       add.info = "Show Data" %in% input$plotCategories, # change JR, 20140409
-                       categories.to.plot = input$plotCategories[!(input$plotCategories %in% "Show Data")], # change JR, 20140409
+                       plot.prop = ifelse(input$plotType == "perc", TRUE, FALSE),
+                       add.info = "Show Data" %in% input$plotCategories,
+                       categories.to.plot = input$plotCategories[!(input$plotCategories %in% "Show Data")],
                        cex.adj.factor = 0.7)
     })
   }
@@ -357,7 +357,7 @@ output$downloadEstimates <- downloadHandler(
     run.name <- getRunName()
     iso.select <- gsub(" ", "", input$isoselect)
     results <- outputResults(run.name = run.name, indicator = input$resultsIndicator, 
-                             type.is.prop = ifelse(input$resultsType == "perc", TRUE, FALSE), # change JR 20140401
+                             type.is.prop = ifelse(input$resultsType == "perc", TRUE, FALSE),
                              iso.select = iso.select)
     write.csv(results, file, row.names = F, na = "")
   }
@@ -369,13 +369,13 @@ output$downloadPlot <- downloadHandler(
     paste0("Results Plot ", gsub(" ", "", input$isoselect), " ", Sys.Date(), ".pdf")
   },
   content <- function(file) {
-    pdf(file, width = 21, height = 12)
+    pdf(file, width = 21, height = 18)
     RunMCMCAndGetResults()
     run.name <- getRunName()
     ShinyPlotResults(run.name = run.name,
-                     plot.prop = ifelse(input$plotType == "perc", TRUE, FALSE), # change JR, 20140411
-                     add.info = "Show Data" %in% input$plotCategories, # change JR, 20140409
-                     categories.to.plot = input$plotCategories[!(input$plotCategories %in% "Show Data")]) # change JR, 20140409
+                     plot.prop = ifelse(input$plotType == "perc", TRUE, FALSE),
+                     add.info = "Show Data" %in% input$plotCategories,
+                     categories.to.plot = input$plotCategories[!(input$plotCategories %in% "Show Data")])
     dev.off()}
 )
 #----------------------------------------------------------------------
@@ -764,7 +764,7 @@ output$resultsPlotChart <- renderUI({
           downloadButton("downloadPlot", "Download graph"))
     ),
     fluidRow(uiOutput("selectPlotCategories")),
-    plotOutput("resultsPlot", width = "1050px", height = "550px")
+    plotOutput("resultsPlot", width = "1050px", height = "850px")
   )
 })
 #----------------------------------------------------------------------

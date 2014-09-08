@@ -179,10 +179,10 @@ ShinyPlotResults <- function(# Plot results.
 ) {
   output.dir <- file.path(getwd(), "output", run.name, "/")
   
-  load(file = paste(output.dir,"par.ciq.rda", sep = ""))
-  load(file = paste(output.dir,"mcmc.meta.rda", sep = ""))
-  do.country.specific.run <- mcmc.meta$general$do.country.specific.run # change JR, 20131104 
-  load(file = paste(output.dir,"res.country.rda", sep = ""))
+  load(file = file.path(output.dir,"par.ciq.rda"))
+  load(file = file.path(output.dir,"mcmc.meta.rda"))
+  do.country.specific.run <- mcmc.meta$general$do.country.specific.run
+  load(file = file.path(output.dir,"res.country.rda"))
 
   if (is.null(iso.select)) {
     select.c <- NULL
@@ -221,7 +221,7 @@ getPlotCategories <- function(type) {
                "Ratio of modern/total CP" = "Modern/Total", 
                "Unmet need for modern methods" = "TradPlusUnmet",
                "Total demand for FP" = "TotalPlusUnmet", 
-               "FP demand met with modern methods" = "Met Demand with Modern Methods"
+               "FP demand met with modern methods" = "Met Demand with Modern Methods",
                "Unmet need for FP" = "Unmet",
                "Total demand for FP" = "TotalPlusUnmet", 
                "FP demand met" = "Met Demand",
@@ -348,10 +348,6 @@ ShinyPlotComparison <- function(# Plot lots of results!
                        ymax.at.100 = FALSE,
                        fig.name = NULL,
                        cex.adj.factor = cex.adj.factor)
-}
-#----------------------------------------------------------------------
-EmptyPlot <- function() {
-  plot(1, type = "n", xlab = "", ylab = "", xaxt = "n", yaxt = "n", bty = "n")
 }
 #----------------------------------------------------------------------
 # Source: https://github.com/leonawicz  

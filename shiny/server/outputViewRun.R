@@ -112,7 +112,7 @@ readInMWRADataExisting <- reactive({
   return(MWRA.table)
 })
 #----------------------------------------------------------------------
-# MWRA data table # change JR, 20140401
+# MWRA data table
 output$countryMWRADataExisting <- renderDataTable({
   withProgress(session, min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
@@ -163,18 +163,18 @@ output$resultsPlotExisting <- renderPlot({
   withProgress(session, min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
-    if (input$chooseAction != "viewrun") EmptyPlot()
-    if (is.null(input$runnameExisting)) EmptyPlot()
-    if (input$runnameExisting == "NULL") EmptyPlot()
-    if (input$isoselectview == "???") EmptyPlot()
+    if (input$chooseAction != "viewrun") InternalPlotNull()
+    if (is.null(input$runnameExisting)) InternalPlotNull()
+    if (input$runnameExisting == "NULL") InternalPlotNull()
+    if (input$isoselectview == "???") InternalPlotNull()
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 90)
     run.name <- input$runnameExisting
     iso.select <- input$isoselectview
     ShinyPlotResults(run.name = run.name, iso.select = iso.select, 
-                     plot.prop = ifelse(input$plotTypeView == "perc", TRUE, FALSE), # change JR, 20140411
-                     add.info = "Show Data" %in% input$plotCategoriesView, # change JR, 20140409
-                     categories.to.plot = input$plotCategoriesView[!(input$plotCategoriesView %in% "Show Data")], # change JR, 20140409
+                     plot.prop = ifelse(input$plotTypeView == "perc", TRUE, FALSE),
+                     add.info = "Show Data" %in% input$plotCategoriesView,
+                     categories.to.plot = input$plotCategoriesView[!(input$plotCategoriesView %in% "Show Data")],
                      cex.adj.factor = 0.7)
   })
 })
@@ -197,14 +197,13 @@ output$downloadPlotExisting <- downloadHandler(
     paste0("Results Plot ", input$runnameExisting, "_", input$isoselectview, " ", Sys.Date(), ".pdf")
   },
   content <- function(file) {
-    pdf(file, width = 21, height = 12)
+    pdf(file, width = 21, height = 18)
     run.name <- input$runnameExisting
     iso.select <- input$isoselectview
     ShinyPlotResults(run.name = run.name, iso.select = iso.select, 
-                     plot.prop = ifelse(input$plotTypeView == "perc", TRUE, FALSE), # change JR, 20140411
-                     add.info = "Show Data" %in% input$plotCategoriesView, # change JR, 20140409
-                     categories.to.plot = input$plotCategoriesView[!(input$plotCategoriesView %in% "Show Data")]) # change JR, 20140409
-    dev.off()
+                     plot.prop = ifelse(input$plotTypeView == "perc", TRUE, FALSE),
+                     add.info = "Show Data" %in% input$plotCategoriesView,
+                     categories.to.plot = input$plotCategoriesView[!(input$plotCategoriesView %in% "Show Data")])
   }
 )
 #----------------------------------------------------------------------
@@ -642,7 +641,8 @@ output$resultsPlotExistingChart <- renderUI({
       ),
       fluidRow(uiOutput("selectPlotCategoriesView")),
       fluidRow(p()),
-      plotOutput("resultsPlotExisting", width = "1050px", height = "550px"))
+      plotOutput("resultsPlotExisting", width = "1050px", height = "850px")
+  )
 })
 output$targetPanelExistingAll <- renderUI({
   if (input$chooseAction != "viewrun") return(NULL)

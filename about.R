@@ -26,6 +26,6 @@ function(){
              "For any questions, feedback or suggestions, please contact JR New at jrnew[at]nus.edu.sg."),
            p("Please use the latest version of Google Chrome, Mozilla Firefox or Internet Explorer to run FPET; there may be problems with other browsers/versions."),
            p("Suggested citation: New, JR and Alkema, L (2014). Family Planning Estimation Tool (FPET). Available at http://jrnew.shinyapps.io/FPET/."),
-           p(em(paste("Last updated: 30 Aug 2014")))
+           p(em(paste("Last updated: 7 Sep 2014")))
   )
 }

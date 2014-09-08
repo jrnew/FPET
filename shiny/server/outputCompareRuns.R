@@ -71,10 +71,10 @@ output$resultsPlotComparison <- renderPlot({
   withProgress(session, min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
-    if (input$chooseAction != "compareruns") EmptyPlot()
-    if (is.null(input$runnameCompare1) | is.null(input$runnameCompare2)) EmptyPlot()
-    if (input$runnameCompare1 == "NULL" | input$runnameCompare2 == "NULL") EmptyPlot()
-    if (input$isoselectcompare == "???") EmptyPlot()
+    if (input$chooseAction != "compareruns") InternalPlotNull()
+    if (is.null(input$runnameCompare1) | is.null(input$runnameCompare2)) InternalPlotNull()
+    if (input$runnameCompare1 == "NULL" | input$runnameCompare2 == "NULL") InternalPlotNull()
+    if (input$isoselectcompare == "???") InternalPlotNull()
     run.name1 <- input$runnameCompare1
     run.name2 <- input$runnameCompare2
     iso.select <- input$isoselectcompare
@@ -110,7 +110,7 @@ output$downloadPlotComparison <- downloadHandler(
            "_", input$isoselectcompare, " ", Sys.Date(), ".pdf")
   },
   content <- function(file) {
-    pdf(file, width = 21, height = 12)
+    pdf(file, width = 21, height = 18)
     run.name1 <- input$runnameCompare1
     run.name2 <- input$runnameCompare2
     iso.select <- input$isoselectcompare
@@ -168,5 +168,5 @@ output$resultsPlotComparisonPlot <- renderUI({
       ),
       fluidRow(uiOutput("selectPlotCategoriesCompare")),
       fluidRow(p()),
-      plotOutput("resultsPlotComparison", width = "1050px", height = "550px"))
+      plotOutput("resultsPlotComparison", width = "1050px", height = "850px"))
 })
