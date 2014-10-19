@@ -97,7 +97,8 @@ RunMCMCAndGetResults <- reactive({
           ConstructMCMCArray(run.name = run.name, do.SS.run.first.pass = TRUE)
           ConstructOutput(run.name = run.name,
                           MWRA.csv = MWRA.csv.file,
-                          start.year = 1970.5, end.year = 2035.5, # change to shorter period including year required to estimate bias.modern to speed up?
+                          start.year = input$estyears[1] + 0.5, 
+                          end.year = input$estyears[2] + 0.5, # change to shorter period including year required to estimate bias.modern to speed up first run for SS model?
                           do.SS.run.first.pass = TRUE)
           #----------------------------------------------------------------------
           # Second pass
@@ -135,7 +136,8 @@ RunMCMCAndGetResults <- reactive({
           ConstructMCMCArray(run.name = run.name, do.SS.run.first.pass = TRUE)
           ConstructOutput(run.name = run.name,
                           MWRA.csv = MWRA.csv.file,
-                          start.year = 1970.5, end.year = 2035.5, # change to shorter period including year required to estimate bias.modern to speed up?
+                          start.year = input$estyears[1] + 0.5, 
+                          end.year = input$estyears[2] + 0.5, # change to shorter period including year required to estimate bias.modern to speed up?
                           do.SS.run.first.pass = TRUE)
           #----------------------------------------------------------------------
           # Second pass
@@ -156,8 +158,8 @@ RunMCMCAndGetResults <- reactive({
                   value = 82)
       ConstructOutput(run.name = run.name,
                       MWRA.csv = MWRA.csv.file,
-                      start.year = input$est.years[1] + 0.5,
-                      end.year = input$est.years[1] + 0.5)
+                      start.year = input$estyears[1] + 0.5,
+                      end.year = input$estyears[2] + 0.5)
       setProgress(message = 'Run complete!', value = 85)
       GetTablesRes(run.name = run.name, name.res = "Country")
       GetTablesChange(run.name = run.name, name.res = "Country")

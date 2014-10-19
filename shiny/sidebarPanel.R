@@ -7,16 +7,6 @@ sidebarPanel(
   tags$head(
     tags$link(rel="stylesheet", type="text/css", href="style.css")
   ),
-  # Google analytics
-  HTML("<script>",
-       "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){",
-       "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),",
-       "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)",
-       "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');",  
-       "ga('create', 'UA-42087579-2', 'shinyapps.io');",
-       "ga('send', 'pageview');",
-       "</script>"
-  ),
   helpText("Estimate family planning indicators for any country."),
   wellPanel(
     radioButtons("chooseAction", strong("Choose action:"),
@@ -66,7 +56,7 @@ sidebarPanel(
       fluidRow(div(class = "span4", textInput("runname", "Run name:", "test")),
                div(class = "span8", shinyalert("duplicateRunAlert", click.hide = FALSE, auto.close.after = 5))), # change JR, 20140418
       checkboxInput("shortRun", "Do short run", TRUE),
-      sliderInput(inputId = "est.years", label = "Estimate years:",
+      sliderInput(inputId = "estyears", label = "Estimate years:",
                   min = 1970, max = 2035, step = 1, 
                   value = c(1990, 2020),
                   format = "####"),

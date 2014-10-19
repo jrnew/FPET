@@ -5,8 +5,8 @@
 function(){
   tabPanel("About",
            p("Family Planning Estimation Tool, or FPET, is a web application available at ",
-                    a("http://jrnew.shinyapps.io/FPET/.", 
-                      href = "http://jrnew.shinyapps.io/FPET/", target = "_blank")),
+                    a("http://fpet.track20.org/.", 
+                      href = "http://fpet.track20.org/", target = "_blank")),
            p("This web application is a country-specific implementation of the estimation approach for contraceptive prevalence and unmet need for family planning used by the United Nations Population Division (UNPD).",
              "Refer to UNPD's ",
              a("World Contraceptive Use 2014", 
@@ -25,7 +25,7 @@ function(){
            p("This app was created by Jin Rou New and Leontine Alkema (Department of Statistics & Applied Probability, National University of Singapore).",
              "For any questions, feedback or suggestions, please contact JR New at jrnew[at]nus.edu.sg."),
            p("Please use the latest version of Google Chrome, Mozilla Firefox or Internet Explorer to run FPET; there may be problems with other browsers/versions."),
-           p("Suggested citation: New, JR and Alkema, L (2014). Family Planning Estimation Tool (FPET). Available at http://jrnew.shinyapps.io/FPET/."),
-           p(em(paste("Last updated: 7 Sep 2014")))
+           p("Suggested citation: New, JR and Alkema, L (2014). Family Planning Estimation Tool (FPET). Available at http://fpet.track20.org/"),
+           p(em(paste("Last updated: 10 Sep 2014")))
   )
 }
