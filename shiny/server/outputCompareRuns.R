@@ -48,10 +48,10 @@ output$resultsViewComparison <- renderDataTable({
       results
     }
   })
-}, options = list(aLengthMenu = c(5, 10, 20, 50), 
-                  bFilter = FALSE,
-                  bSortClasses = TRUE, 
-                  iDisplayLength = 10))
+}, options = list(lengthMenu = c(5, 10, 20, 50), 
+                  searching = FALSE,
+                  orderClasses = TRUE, 
+                  pageLength = 10))
 #----------------------------------------------------------------------
 # To get plot categories
 output$selectPlotCategoriesCompare <- renderUI({

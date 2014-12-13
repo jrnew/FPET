@@ -250,10 +250,10 @@ output$countryData <- renderDataTable({
       obs
     }
   })
-}, options = list(aLengthMenu = c(5, 10, 20, 50, 100), 
-                  bFilter = FALSE,
-                  bSortClasses = TRUE, 
-                  iDisplayLength = 10))
+}, options = list(lengthMenu = c(5, 10, 20, 50, 100), 
+                  searching = FALSE,
+                  orderClasses = TRUE, 
+                  pageLength = 10))
 #----------------------------------------------------------------------
 # To display MWRA data # change JR, 20140401
 readInMWRAData <- reactive({
@@ -300,10 +300,10 @@ output$countryMWRAData <- renderDataTable({
       MWRA
     }
   })
-}, options = list(aLengthMenu = c(5, 10, 20, 50, 100),
-                  bFilter = FALSE,
-                  bSortClasses = TRUE, 
-                  iDisplayLength = 10))
+}, options = list(lengthMenu = c(5, 10, 20, 50, 100),
+                  searching = FALSE,
+                  orderClasses = TRUE, 
+                  pageLength = 10))
 #----------------------------------------------------------------------
 # Show log file
 output$log <- renderPrint({
@@ -323,10 +323,10 @@ output$resultsView <- renderDataTable({
                            type.is.prop = ifelse(input$resultsType == "perc", TRUE, FALSE),
                            iso.select = iso.select)
   results
-}, options = list(aLengthMenu = c(5, 10, 20, 50), 
-                  bFilter = FALSE,
-                  bSortClasses = TRUE, 
-                  iDisplayLength = 10))
+}, options = list(lengthMenu = c(5, 10, 20, 50), 
+                  searching = FALSE,
+                  orderClasses = TRUE, 
+                  pageLength = 10))
 #----------------------------------------------------------------------
 # Show plot
 output$resultsPlot <- renderPlot({

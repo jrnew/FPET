@@ -82,10 +82,10 @@ output$countryDataExisting <- renderDataTable({
       obs
     }
   })  
-}, options = list(aLengthMenu = c(5, 10, 20, 50, 100), 
-                  bFilter = FALSE,
-                  bSortClasses = TRUE, 
-                  iDisplayLength = 10))
+}, options = list(lengthMenu = c(5, 10, 20, 50, 100), 
+                  searching = FALSE,
+                  orderClasses = TRUE, 
+                  pageLength = 10))
 #----------------------------------------------------------------------
 # To display MWRA data # change JR, 20140401
 readInMWRADataExisting <- reactive({
@@ -124,10 +124,10 @@ output$countryMWRADataExisting <- renderDataTable({
       MWRA
     }
   })  
-}, options = list(aLengthMenu = c(5, 10, 20, 50, 100), 
-                  bFilter = FALSE,
-                  bSortClasses = TRUE, 
-                  iDisplayLength = 10))
+}, options = list(lengthMenu = c(5, 10, 20, 50, 100), 
+                  searching = FALSE,
+                  orderClasses = TRUE, 
+                  pageLength = 10))
 #----------------------------------------------------------------------
 # Display results data table
 output$resultsViewExisting <- renderDataTable({
@@ -140,10 +140,10 @@ output$resultsViewExisting <- renderDataTable({
                 value = 60)
     results
   })
-}, options = list(aLengthMenu = c(5, 10, 20, 50),
-                  bFilter = FALSE,
-                  bSortClasses = TRUE, 
-                  iDisplayLength = 10))
+}, options = list(lengthMenu = c(5, 10, 20, 50),
+                  searching = FALSE,
+                  orderClasses = TRUE, 
+                  pageLength = 10))
 #----------------------------------------------------------------------
 # To get plot categories
 output$selectPlotCategoriesView <- renderUI({

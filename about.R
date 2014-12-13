@@ -3,7 +3,7 @@
 # Jin Rou New, 2013-2014
 #----------------------------------------------------------------------
 function(){
-  tabPanel("About",
+  tabPanel(title = "About", value = "nil",
            p("Family Planning Estimation Tool, or FPET, is a web application available at ",
                     a("http://fpet.track20.org/.", 
                       href = "http://fpet.track20.org/", target = "_blank")),
