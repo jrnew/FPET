@@ -1,20 +1,9 @@
 #----------------------------------------------------------------------
-# sidebarPanel.R
+# sidebarPanelNew.R
 # Jin Rou New, 2013
 #----------------------------------------------------------------------
 sidebarPanel(
   width = 3,
-  tags$head(
-    tags$link(rel="stylesheet", type="text/css", href="style.css")
-  ),
-  helpText("Estimate family planning indicators for any country."),
-  wellPanel(
-    radioButtons("chooseAction", strong("Choose action:"),
-                 choices = c("None" = "nil",
-                             "View an existing run" = "viewrun",
-                             "Start a new run" = "newrun",
-                             "Compare runs" = "compareruns"))
-  ),
   #======================================================================
   # Do a new run
   #======================================================================
@@ -63,39 +52,5 @@ sidebarPanel(
       fluidRow(div(class = "span3", actionButton("startRun", "Start run!", styleclass = "primary")), # change JR, 20140418
                div(class = "span8", shinyalert("startRunAlert", click.hide = FALSE, auto.close.after = 5))) # change JR, 20140418
     )
-  ), # end conditionalPanel for newrun
-  #======================================================================
-  # View an existing run
-  #======================================================================
-  conditionalPanel(
-    condition = "input.chooseAction == 'viewrun'",
-    # Select run
-    wellPanel(
-      p(strong("1. Select existing run.")),
-      uiOutput("selectRunnameExisting")
-    ),
-    # Select country to view
-    wellPanel(
-      p(strong("2. Select country/population and view data and results.")),
-      uiOutput("selectISOView")
-    )
-  )
-  , # end conditionalPanel for viewrun
-  #======================================================================
-  # Compare runs
-  #======================================================================
-  conditionalPanel(
-    condition = "input.chooseAction == 'compareruns'",
-    # Select run
-    wellPanel(
-      p(strong("1. Select runs to compare.")),
-      uiOutput("selectRunnameCompare1"),
-      uiOutput("selectRunnameCompare2")
-    ),
-    # Select country to compare
-    wellPanel(
-      p(strong("2. Select country/population to compare runs for.")),
-      uiOutput("selectISOCompare")
-    )
-  ) # end conditionalPanel for compareruns
+  ) # end conditionalPanel for newrun
 )

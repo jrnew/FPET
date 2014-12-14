@@ -19,9 +19,9 @@
 
 # 3. Run code below. App will open in browser.
 rm(list = ls())
-require(shiny)
+library(shiny)
 # work.dir <- "D:/Dropbox/CP1countryruns/FPET"
-work.dir <- "~/Dropbox/CP1countryruns/FPET"
+work.dir <- "~/Dropbox/CP1countryruns/FPET_newlayout"
 setwd(work.dir)
 runApp(getwd(), port = 8888)
 #----------------------------------------------------------------------

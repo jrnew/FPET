@@ -9,18 +9,48 @@ output$progressBar <- renderUI({
                 value = 0)
   })
 })
-  
-output$headerPanel <- renderUI({
+
+# output$headerPanel <- renderUI({
+#   withProgress(session, min=0, max=100, expr={
+#     setProgress(message = 'Loading', detail = 'Please wait...',
+#                 value = 0)
+#     if (input$chooseAction == "nil") {
+#       h5("Please choose an action.")
+#     } else if (input$chooseAction == "newrun") {
+#       h5(textOutput("runnameNew"))
+#     } else if (input$chooseAction == "viewrun") {
+#       h5(textOutput("runnameExisting"))
+#     } else if (input$chooseAction == "compareruns") {
+#       h5(textOutput("runnamesCompare"))
+#     }
+#   })
+# })
+
+output$headerPanelNew <- renderUI({
   withProgress(session, min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
-    if (input$chooseAction == "nil") {
-      h5("Please choose an action.")
-    } else if (input$chooseAction == "newrun") {
+    if (input$chooseAction == "newrun") {
       h5(textOutput("runnameNew"))
-    } else if (input$chooseAction == "viewrun") {
+    }
+  })
+})
+
+output$headerPanelView <- renderUI({
+  withProgress(session, min=0, max=100, expr={
+    setProgress(message = 'Loading', detail = 'Please wait...',
+                value = 0)
+    if (input$chooseAction == "viewrun") {
       h5(textOutput("runnameExisting"))
-    } else if (input$chooseAction == "compareruns") {
+    } 
+  })
+})
+
+output$headerPanelCompare <- renderUI({
+  withProgress(session, min=0, max=100, expr={
+    setProgress(message = 'Loading', detail = 'Please wait...',
+                value = 0)
+    if (input$chooseAction == "compareruns") {
       h5(textOutput("runnamesCompare"))
     }
   })
