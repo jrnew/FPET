@@ -20,14 +20,13 @@
 # 3. Run code below. App will open in browser.
 rm(list = ls())
 library(shiny)
-# work.dir <- "D:/Dropbox/CP1countryruns/FPET"
-work.dir <- "~/Dropbox/CP1countryruns/FPET_newlayout"
+work.dir <- "~/Dropbox/CP1countryruns/FPET"
 setwd(work.dir)
-runApp(getwd(), port = 8888)
+runApp(getwd(), port = 1234)
 #----------------------------------------------------------------------
 # devtools::install_github('rstudio/shinyapps')
-require(shinyapps)
-require(RPushbullet)
+library(shinyapps)
+library(RPushbullet)
 shinyapps::setAccountInfo(name="jrnew", token="A45DC21747C8D970327E9FE8CCABB461", 
                           secret="Sufbe3CH7XxvbMf1qHvrocVvlgAnrn+Wi4CbVUMF")
 # sessionInfo()
@@ -46,7 +45,7 @@ pbPost(type = "note",
 #----------------------------------------------------------------------
 # END
 #----------------------------------------------------------------------
-runApp("C:/Program Files/SkyScorer/Apps/SkyScorer/Shiny")
+# runApp("C:/Program Files/SkyScorer/Apps/SkyScorer/Shiny")
 # ShinySky
 # require(shinysky)
 # shinysky::run.shinysky.example()

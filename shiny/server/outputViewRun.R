@@ -52,7 +52,7 @@ readInDataExisting <- reactive({
       data.unpd <- read.csv(file = getFilePathExisting(), header = T, stringsAsFactors = F)
       data.output <- subsetData(data.unpd, iso.select = input$isoselectview)
     } else {
-      load("shiny/data.output_UNPD2014.rda")
+      load("shiny/data.output_UNPD.rda")
     }
   } else {
     data.unpd <- read.csv(file = getFilePathExisting(), header = T, stringsAsFactors = F)

@@ -13,7 +13,7 @@ if (run.on.server) {
 }
 
 library(shiny)
-library(shinyIncubator)
+# library(shinyIncubator)
 library(shinysky)
 library(MCMCpack)
 library(rjags)
@@ -22,7 +22,8 @@ library(lattice)
 library(abind)
 library(msm)
 library(proto)
-library(plyr)
+# library(plyr)
+library(dplyr)
 library(ggplot2)
 library(reshape2)
 
@@ -52,8 +53,8 @@ indicator.count.labels <- c("on any contraception" = "Total",
                             "with FP demand met with modern methods" = "Met Demand with Modern Methods")
 #----------------------------------------------------------------------
 getRunnameUNPD <- function() {
-  run.name <- "Run20140520" # change JR, 20140612
-  return(list(name = "UNPD 2014", run.name = run.name))
+  run.name <- "Run20150408" # change JR, 20140422
+  return(list(name = "UNPD 2015", run.name = run.name))
 }
 #----------------------------------------------------------------------
 subsetData <- function(

@@ -12,6 +12,8 @@ function() {
              a("World Contraceptive Use 2014", 
                href = "http://www.un.org/en/development/desa/population/publications/dataset/contraception/wcu2014.shtml", target = "_blank"),
              " for the most recent database and estimates."),
+           p("Instructions for use of FPET are available at: ",
+             a("http://www.track20.org/pages/resources/all-resources/track20_tools.", href = "http://www.track20.org/pages/resources/all-resources/track20_tools", target = "_blank")),           
            p("The global implementation of the estimation approach is described in:",
              "Alkema, L. et al. (2013). National, regional and global rates and trends in contraceptive prevalence and unmet need for family planning between 1990 and 2015: a systematic and comprehensive analysis. Lancet, 2013, 381(9878):1642-1652. Available at ",
              a("http://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)62204-1/abstract.", href = "http://www.thelancet.com/journals/lancet/article/PIIS0140-6736(12)62204-1/abstract", target = "_blank")),

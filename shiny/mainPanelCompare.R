@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------
 mainPanel(
   width = 9,
-  progressInit(),
+  # progressInit(),
   uiOutput("headerPanelCompare"),
   #======================================================================
   # Compare runs

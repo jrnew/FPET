@@ -201,9 +201,9 @@ getFilePath <- reactive({
 readInData <- reactive({
   if (input$chooseDatabase == "default") {
     if (is.null(input$isoselect)) {
-      load("shiny/data.output_UNPD2014.rda")
+      load("shiny/data.output_UNPD.rda")
     } else if (input$isoselect == "???") {
-      load("shiny/data.output_UNPD2014.rda")
+      load("shiny/data.output_UNPD.rda")
     } else {
       data.unpd <- read.csv(file = getFilePath(), header = T, stringsAsFactors = F)
       data.output <- subsetData(data.unpd, iso.select = gsub(" ", "", input$isoselect))
