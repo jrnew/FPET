@@ -4,14 +4,14 @@
 # Jin Rou New, 2013
 #----------------------------------------------------------------------
 output$progressBar <- renderUI({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
   })
 })
 
 # output$headerPanel <- renderUI({
-#   withProgress(session, min=0, max=100, expr={
+#   withProgress(min=0, max=100, expr={
 #     setProgress(message = 'Loading', detail = 'Please wait...',
 #                 value = 0)
 #     if (input$chooseAction == "nil") {
@@ -27,7 +27,7 @@ output$progressBar <- renderUI({
 # })
 
 output$headerPanelNew <- renderUI({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (input$chooseAction == "newrun") {
@@ -37,7 +37,7 @@ output$headerPanelNew <- renderUI({
 })
 
 output$headerPanelView <- renderUI({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (input$chooseAction == "viewrun") {
@@ -47,7 +47,7 @@ output$headerPanelView <- renderUI({
 })
 
 output$headerPanelCompare <- renderUI({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (input$chooseAction == "compareruns") {
@@ -57,7 +57,7 @@ output$headerPanelCompare <- renderUI({
 })
 
 output$runnameNew <- renderText({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 20)
     if (is.null(input$isoselect)) {
@@ -71,7 +71,7 @@ output$runnameNew <- renderText({
 })
 
 output$runnameExisting <- renderText({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 20)
     if (is.null(input$runnameExisting)) {
@@ -91,7 +91,7 @@ output$runnameExisting <- renderText({
 })
 
 output$runnamesCompare <- renderText({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 20)
     if (is.null(input$runnameCompare1) | is.null(input$runnameCompare2)) {

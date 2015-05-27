@@ -27,7 +27,7 @@ RunMCMCAndGetResults <- reactive({
   if (input$startRun == 0) return(NULL)
   if (input$isoselect == "???") return(NULL)
   if (duplicateRun()) return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)  
     isolate({
@@ -240,7 +240,7 @@ readInData <- reactive({
 #----------------------------------------------------------------------
 # Data table
 output$countryData <- renderDataTable({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     obs <- readInData()
@@ -290,7 +290,7 @@ readInMWRAData <- reactive({
 #----------------------------------------------------------------------
 # MWRA data table # change JR, 20140401
 output$countryMWRAData <- renderDataTable({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     MWRA <- readInMWRAData()
@@ -310,6 +310,14 @@ output$log <- renderPrint({
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
   RunMCMCAndGetResults()
+})
+#----------------------------------------------------------------------
+# To get chart categories # change JR, 20150527
+output$selectChartCategories <- renderUI({
+  div(class = "span3",
+      selectInput("resultsIndicator", "Indicator to display",
+                  choices = getChartCategories(input$resultsType), 
+                  selected = "Total", selectize = FALSE))
 })
 #----------------------------------------------------------------------
 # Display results data table
@@ -333,7 +341,7 @@ output$resultsPlot <- renderPlot({
   if (input$startRun == 0) {
     InternalPlotNull()
   } else {
-    withProgress(session, min=0, max=100, expr={
+    withProgress(min=0, max=100, expr={
       RunMCMCAndGetResults()
       setProgress(message = 'Loading', detail = 'Please wait...',
                   value = 90)
@@ -387,7 +395,8 @@ output$selectPlotCategories <- renderUI({
   div(class = "span12",
       checkboxGroupInput("plotCategories", "Display the following: ", 
                          choices = getPlotCategories(input$plotType)$choices, 
-                         selected = getPlotCategories(input$plotType)$selected),
+                         selected = getPlotCategories(input$plotType)$selected,
+                         inline = TRUE), # change JR, 20150422
       tags$style(type="text/css", 
                  HTML(paste0("#", "plotCategories", 
                              ">*{float: left; margin-right: 15px; height: 20px;} #", 
@@ -399,7 +408,7 @@ output$countryDataChart <- renderUI({
   if (input$chooseDatabase == "other" & is.null(input$datafile$datapath)) return(NULL)
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 90)
     dataTableOutput("countryData")
@@ -411,7 +420,7 @@ output$countryMWRADataChart <- renderUI({
   if (input$chooseMWRADatabase == "other" & is.null(input$MWRAfile$datapath)) return(NULL)
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 90)
     dataTableOutput("countryMWRAData")
@@ -421,7 +430,7 @@ output$countryMWRADataChart <- renderUI({
 output$postprobOutput <- renderText({ # change JR, 20140210
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (is.null(RunMCMCAndGetResults())) return(NULL)
@@ -444,7 +453,7 @@ output$postprobOutput <- renderText({ # change JR, 20140210
 output$percOutput <- renderText({ # change JR, 20140210
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (is.null(RunMCMCAndGetResults())) return(NULL)
@@ -467,7 +476,7 @@ output$percOutput <- renderText({ # change JR, 20140210
 output$postprobwOutput <- renderText({ # change JR, 201403112
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (is.null(RunMCMCAndGetResults())) return(NULL)
@@ -500,7 +509,7 @@ output$postprobwOutput <- renderText({ # change JR, 201403112
 output$nwomenOutput <- renderText({ # change JR, 201403112
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (is.null(RunMCMCAndGetResults())) return(NULL)
@@ -658,7 +667,7 @@ output$targetPanel4 <- renderUI ({
 output$changeOutput <- renderText({
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorc) | is.null(input$year1c) | is.null(input$year2c))
@@ -676,7 +685,7 @@ output$changeOutput <- renderText({
 output$changewOutput <- renderText({ # change JR, 20140623
   if (is.null(input$isoselect)) return(NULL)
   if (input$isoselect == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorcw) | is.null(input$year1cw) | is.null(input$year2cw))
@@ -737,10 +746,7 @@ output$resultsViewChart <- renderUI({
                       choices = c("Percentage" = "perc", 
                                   "Count (in '000s)" = "count"),
                       selected = "perc", selectize = FALSE)),
-      div(class = "span3",
-          selectInput("resultsIndicator", "Indicator to display",
-                      choices = indicator.labels,
-                      selected = "Total", selectize = FALSE)),
+      uiOutput("selectChartCategories"), # change JR, 21050527
       div(class = "span6", align = "right",
           downloadButton("downloadEstimates", "Download results"))
     ),

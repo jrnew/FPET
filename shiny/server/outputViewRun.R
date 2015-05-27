@@ -72,7 +72,7 @@ readInDataExisting <- reactive({
 #----------------------------------------------------------------------
 # Data table
 output$countryDataExisting <- renderDataTable({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     obs <- readInDataExisting()
@@ -114,7 +114,7 @@ readInMWRADataExisting <- reactive({
 #----------------------------------------------------------------------
 # MWRA data table
 output$countryMWRADataExisting <- renderDataTable({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     MWRA <- readInMWRADataExisting()
@@ -129,9 +129,17 @@ output$countryMWRADataExisting <- renderDataTable({
                   orderClasses = TRUE, 
                   pageLength = 10))
 #----------------------------------------------------------------------
+# To get chart categories # change JR, 20150527
+output$selectChartCategoriesView <- renderUI({
+  div(class = "span3",
+      selectInput("resultsIndicatorView", "Indicator to display",
+                  choices = getChartCategories(input$resultsTypeView), 
+                  selected = "Total", selectize = FALSE))
+})
+#----------------------------------------------------------------------
 # Display results data table
 output$resultsViewExisting <- renderDataTable({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     results <- getResultsExisting()
@@ -148,10 +156,11 @@ output$resultsViewExisting <- renderDataTable({
 # To get plot categories
 output$selectPlotCategoriesView <- renderUI({
   if (input$chooseAction != "viewrun") return(NULL)
-  div(class = "span12",
+  div(class = "span8",
       checkboxGroupInput("plotCategoriesView", "Display the following: ", 
                          choices = getPlotCategories(input$plotTypeView)$choices, 
-                         selected = getPlotCategories(input$plotTypeView)$selected),
+                         selected = getPlotCategories(input$plotTypeView)$selected,
+                         inline = TRUE), # change JR, 20150422
       tags$style(type="text/css", 
                  HTML(paste0("#", "plotCategoriesView", 
                              ">*{float: left; margin-right: 15px; height: 20px;} #", 
@@ -160,7 +169,7 @@ output$selectPlotCategoriesView <- renderUI({
 #----------------------------------------------------------------------
 # Show plot
 output$resultsPlotExisting <- renderPlot({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (input$chooseAction != "viewrun") InternalPlotNull()
@@ -210,7 +219,7 @@ output$downloadPlotExisting <- downloadHandler(
 output$postprobOutputExisting <- renderText({ # change JR, 20140210
   if (is.null(input$isoselectview)) return(NULL)
   if (input$isoselectview == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorppview) | is.null(input$yearppview) | is.null(input$booleanpview) |
@@ -228,7 +237,7 @@ output$postprobOutputExisting <- renderText({ # change JR, 20140210
 output$percOutputExisting <- renderText({ # change JR, 20140210
   if (is.null(input$isoselectview)) return(NULL)
   if (input$isoselectview == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorppview) | is.null(input$yearppview) | is.null(input$booleanppview) |
@@ -246,7 +255,7 @@ output$percOutputExisting <- renderText({ # change JR, 20140210
 output$postprobwOutputExisting <- renderText({ # change JR, 201403112
   if (is.null(input$isoselectview)) return(NULL)
   if (input$isoselectview == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorpwview) | is.null(input$yearpwview) | is.null(input$booleanpwview) |
@@ -274,7 +283,7 @@ output$postprobwOutputExisting <- renderText({ # change JR, 201403112
 output$nwomenOutputExisting <- renderText({ # change JR, 201403112
   if (is.null(input$isoselectview)) return(NULL)
   if (input$isoselectview == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorppwview) | is.null(input$yearppwview) | is.null(input$booleanppwview) |
@@ -425,7 +434,7 @@ output$targetPanelExisting4 <- renderUI ({
 output$changeOutputExisting <- renderText({ # change JR, 20140623
   if (is.null(input$areacview)) return(NULL)
   if (input$areacview == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorcview) | is.null(input$year1cview) | is.null(input$year2cview))
@@ -494,7 +503,7 @@ output$changeOutputExisting <- renderText({ # change JR, 20140623
 output$changewOutputExisting <- renderText({ # change JR, 20140623
   if (is.null(input$areacwview)) return(NULL)
   if (input$areacwview == "???") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 40)
     if (is.null(input$indicatorcwview) | is.null(input$year1cwview) | is.null(input$year2cwview))
@@ -583,7 +592,7 @@ output$countryDataExistingChart <- renderUI({
   if (input$chooseAction != "viewrun") return(NULL)
   if (is.null(input$runnameExisting)) return(NULL)
   if (input$runnameExisting == "NULL") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 90)
     dataTableOutput("countryDataExisting")
@@ -593,7 +602,7 @@ output$countryMWRADataExistingChart <- renderUI({
   if (input$chooseAction != "viewrun") return(NULL)
   if (is.null(input$runnameExisting)) return(NULL)
   if (input$runnameExisting == "NULL") return(NULL)
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 90)
     dataTableOutput("countryMWRADataExisting")
@@ -612,10 +621,7 @@ output$resultsViewExistingChart <- renderUI({
                         choices = c("Percentage" = "perc", 
                                     "Count (in '000s)" = "count"),
                         selected = "perc", selectize = FALSE)),
-        div(class = "span3",
-            selectInput("resultsIndicatorView", "Indicator to display",
-                        choices = indicator.labels,
-                        selected = "Total", selectize = FALSE)),
+        uiOutput("selectChartCategoriesView"), # change JR, 21050527
         div(class = "span6", align = "right",
             downloadButton("downloadEstimatesExisting", "Download results"))
       ),

@@ -1,5 +1,5 @@
 #======================================================================
-# main_processdataforshiny.R
+# main_updatedataforshiny.R
 # Details steps to update FPET with new UNPD data and model run results.
 # Jin Rou New, 2015
 #======================================================================
@@ -7,8 +7,10 @@
 # Process updated data/Number-of-women-married-in union_15-49.csv file.
 # Output new shiny/data.output_UNPD2015.rda file using global.R > subsetData().
 # Copy new UNPD run folder to output folder, checking that it has data.global.rda etc.
+# Copy result CSV files to tables folder.
 # Edit UNPD run name in global.R > getRunnameUNPD() > run.name & name.
 # Output output/{run.name.UNPD}/dataCPmodel_input.csv using FPET.
+# Update about.R.
 #======================================================================
 # Process updated data/Number-of-women-married-in union_15-49.csv file.
 ProcessMWRAForFPET <- function( # Process updated MWRA file for Shiny FPET app.
@@ -71,3 +73,12 @@ source("global.R")
 data <- read.csv("data/dataCPmodel.csv", stringsAsFactors = FALSE)
 data.output <- subsetData(data)
 save(data.output, file = "shiny/data.output_UNPD.rda")
+#======================================================================
+# Output output/{run.name.UNPD}/dataCPmodel_input.csv using FPET.
+# Add periods in place of space for column names.
+run.name <- "Run20150408"
+data <- read.csv("data/dataCPmodel.csv", stringsAsFactors = FALSE)
+dataCPmodel <- data
+names(data)
+write.csv(dataCPmodel, file = file.path("output", run.name, "dataCPmodel_input.csv"),
+          row.names = FALSE)

@@ -43,6 +43,12 @@ indicator.labels <- c("Total CP" = "Total",
                       "Total demand for FP" = "TotalPlusUnmet",
                       "FP demand met" = "Met Demand",
                       "FP demand met with modern methods" = "Met Demand with Modern Methods")
+indicator.labels.subset <- c("Total CP" = "Total", 
+                             "Modern CP" = "Modern", 
+                             "Traditional CP" = "Traditional", 
+                             "Unmet need for FP" = "Unmet",
+                             "Unmet need for modern methods" = "TradPlusUnmet",
+                             "Total demand for FP" = "TotalPlusUnmet")
 indicator.count.labels <- c("on any contraception" = "Total", 
                             "on modern contraception" = "Modern", 
                             "on traditional contraception" = "Traditional", 
@@ -113,13 +119,24 @@ subsetData <- function(
 outputResults <- function(
   run.name,
   indicator, ##<< Any of the following choices: "Total", "Modern", "Traditional", 
-  ## "Unmet", "TotalPlusUnmet", "TradPlusUnmet", "Met Demand" ("Met Demand" only for \code{type.is.prop = TRUE})
+  ## "Unmet", "TotalPlusUnmet", "TradPlusUnmet",
+  ## "Met Demand", "Met Demand with Modern Methods"
+  ## (the latter two only for \code{type.is.prop = TRUE})
   type.is.prop = TRUE, # change JR, 20140401
   iso.select = NULL
 ) {
-  res <- read.csv(file.path("tables", paste0(run.name, 
-                                             ifelse(type.is.prop, "_Country_perc_", "_Country_count_"), # change JR, 20140401
-                                             indicator, ".csv")), 
+  if (is.null(indicator))
+    indicator <- "Total"
+  if (is.null(type.is.prop))
+    type.is.prop <- TRUE
+  res <- read.csv(file.path("tables", 
+                            paste0(run.name, 
+                                   ifelse(!type.is.prop, "_Country_count_",
+                                          ifelse(indicator %in% 
+                                                   c("Met Demand", "Met Demand with Modern Methods"),
+                                                 "_Country_ratio_",
+                                                 "_Country_perc_")),
+                                   indicator, ".csv")), 
                   header = T, stringsAsFactors = F)
   if (!is.null(iso.select))
     res <- res[res$Iso == getUNCode(run.name = run.name, iso = iso.select), ] # change JR, 20140409
@@ -211,6 +228,17 @@ ShinyPlotResults <- function(# Plot results.
                        ymax.at.100 = FALSE,
                        fig.name = NULL,
                        cex.adj.factor = cex.adj.factor)
+}
+#----------------------------------------------------------------------
+# To get chart categories for input selection # change JR, 20150527
+getChartCategories <- function(type) {
+  if (is.null(type)) type <- "perc"
+  if (type == "perc") {
+    choices <- indicator.labels
+  } else {
+    choices <- head(indicator.labels, length(indicator.labels) - 2)
+  }
+  return(choices)
 }
 #----------------------------------------------------------------------
 # To get plot categories for input selection

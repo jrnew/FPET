@@ -36,9 +36,17 @@ output$selectISOCompare <- renderUI({
   selectInput("isoselectcompare", "Country/population:", choices = getISOs(), selectize = FALSE)
 })
 #----------------------------------------------------------------------
+# To get chart categories # change JR, 20150527
+output$selectChartCategoriesCompare <- renderUI({
+  div(class = "span3",
+      selectInput("resultsIndicatorCompare", "Indicator to display",
+                  choices = getChartCategories(input$resultsTypeCompare), 
+                  selected = "Total", selectize = FALSE))
+})
+#----------------------------------------------------------------------
 # Display results data table
 output$resultsViewComparison <- renderDataTable({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     results <- getResultsComparison()
@@ -59,7 +67,8 @@ output$selectPlotCategoriesCompare <- renderUI({
   div(class = "span12",
       checkboxGroupInput("plotCategoriesCompare", "Display the following: ", 
                          choices = getPlotCategories(input$plotTypeCompare)$choices, 
-                         selected = getPlotCategories(input$plotTypeCompare)$selected),
+                         selected = getPlotCategories(input$plotTypeCompare)$selected,
+                         inline = TRUE), # change JR, 20150422
       tags$style(type="text/css", 
                  HTML(paste0("#", "plotCategoriesCompare", 
                              ">*{float: left; margin-right: 15px; height: 20px;} #", 
@@ -68,7 +77,7 @@ output$selectPlotCategoriesCompare <- renderUI({
 #----------------------------------------------------------------------
 # Show plot
 output$resultsPlotComparison <- renderPlot({
-  withProgress(session, min=0, max=100, expr={
+  withProgress(min=0, max=100, expr={
     setProgress(message = 'Loading', detail = 'Please wait...',
                 value = 0)
     if (input$chooseAction != "compareruns") InternalPlotNull()
@@ -138,10 +147,7 @@ output$resultsViewComparisonChart <- renderUI({
                         choices = c("Percentage" = "perc", 
                                     "Count (in '000s)" = "count"),
                         selected = "perc", selectize = FALSE)),
-        div(class = "span3",
-            selectInput("resultsIndicatorCompare", "Indicator to display",
-                        choices = head(indicator.labels, length(indicator.labels)-2),
-                        selected = "Total", selectize = FALSE)),
+        uiOutput("selectChartCategoriesCompare"), # change JR, 21050527
         div(class = "span6", align = "right",
             downloadButton("downloadEstimatesComparison", "Download results"))
       ),

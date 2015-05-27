@@ -22,7 +22,7 @@ function() {
            p("Please use the latest version of Google Chrome, Mozilla Firefox or Internet Explorer to run FPET; there may be problems with other browsers/versions."),
            p(em("Suggested citation: New, JR and Alkema, L (2014). Family Planning Estimation Tool (FPET). Available at http://fpet.track20.org/")),
            br(), br(), 
-           p("Last updated: 12 Dec 2014",
+           p("Last updated: 22 Apr 2015",
              br("Created in ",
                 a("R", 
                   href = "http://www.r-project.org/", target = "_blank"),

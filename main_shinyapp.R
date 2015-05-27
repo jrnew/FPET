@@ -13,7 +13,7 @@
 #           "lattice", "abind", "msm", "proto", 
 #           "plyr", "ggplot2", "reshape2", "foreach")
 # install.packages(pkgs, repos = "http://cran.r-project.org")
-# sapply(pkgs, library, character.only = T)
+# sapply(pkgs, library, character.only = TRUE)
 # devtools::install_github("shiny-incubator", "rstudio")
 # devtools::install_github("ShinySky", "AnalytixWare")
 
@@ -23,6 +23,12 @@ library(shiny)
 work.dir <- "~/Dropbox/CP1countryruns/FPET"
 setwd(work.dir)
 runApp(getwd(), port = 1234)
+
+# TO DOS!!!
+# Fix wonky sizes of all spans
+# https://groups.google.com/forum/#!topic/shiny-discuss/3m7cq96mcBY
+# Fix accented characters for say Enquete, Fecondite
+# Allow run to happen with unused SS data and display SS data on plot.
 #----------------------------------------------------------------------
 # devtools::install_github('rstudio/shinyapps')
 library(shinyapps)
@@ -45,6 +51,13 @@ pbPost(type = "note",
 #----------------------------------------------------------------------
 # END
 #----------------------------------------------------------------------
+# Data tables
+# https://github.com/ThomasSiegmund/D3TableFilter
+# https://github.com/jrowen/rhandsontable
+
+# Interactive visualisations
+# http://hafen.github.io/rbokeh/
+
 # runApp("C:/Program Files/SkyScorer/Apps/SkyScorer/Shiny")
 # ShinySky
 # require(shinysky)
