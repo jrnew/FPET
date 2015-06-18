@@ -6,7 +6,9 @@
 # Overview:
 # Process updated data/Number-of-women-married-in union_15-49.csv file.
 # Output new shiny/data.output_UNPD.rda file using global.R > subsetData().
-# Copy new UNPD run folder to output folder, checking that it has data.global.rda etc.
+# Copy new UNPD run folder to output folder.
+# Generate dataCPmodel_input.csv for new UNPD run.
+# Generate data.global.rda for new UNPD run.
 # Copy result CSV files to tables folder.
 # Edit UNPD run name in global.R > getRunnameUNPD() > run.name & name.
 # Output output/{run.name.UNPD}/dataCPmodel_input.csv using FPET.
@@ -77,12 +79,12 @@ save(data.output, file = "shiny/data.output_UNPD.rda")
 #======================================================================
 # Output output/{run.name.UNPD}/dataCPmodel_input.csv using FPET.
 # Add periods in place of space for column names.
-run.name <- "Run20150408"
+run.name <- "Run20150423"
 data <- read.csv("data/dataCPmodel.csv", stringsAsFactors = FALSE)
 dataCPmodel <- data
 names(data)
 write.csv(dataCPmodel, file = file.path("output", run.name, "dataCPmodel_input.csv"),
           row.names = FALSE)
 #======================================================================
-# Output data.global file for global run.
+# Output output/{run.name.UNPD}/data.global.rda file for global run.
 SummariseGlobalRun("Run20150423")
