@@ -49,13 +49,13 @@ readInDataExisting <- reactive({
   if (input$runnameExisting == "NULL") return(NULL)
   if (input$runnameExisting == getRunnameUNPD()$run.name) {
     if (input$isoselectview != "???") {
-      data.unpd <- read.csv(file = getFilePathExisting(), header = T, stringsAsFactors = F)
+      data.unpd <- read.csv(file = getFilePathExisting(), header = T, stringsAsFactors = F, encoding = "latin1")
       data.output <- subsetData(data.unpd, iso.select = input$isoselectview)
     } else {
       load("shiny/data.output_UNPD.rda")
     }
   } else {
-    data.unpd <- read.csv(file = getFilePathExisting(), header = T, stringsAsFactors = F)
+    data.unpd <- read.csv(file = getFilePathExisting(), header = T, stringsAsFactors = F, encoding = "latin1")
     # change JR, 20140409
     load(file.path("output", input$runnameExisting, "mcmc.meta.rda"))
     name.country.select <- mcmc.meta$data.raw$country.info$name.country.select
@@ -659,8 +659,8 @@ output$targetPanelExistingAll <- renderUI({
     h4("Information for target-setting"),
     p("Select entries below to find a probability associated with a given level of an indicator of interest and vice versa."),
     fluidRow(
-      div(class = "span4", uiOutput("targetPanelExisting1")), 
-      div(class = "span4", uiOutput("targetPanelExisting2"))
+      div(class = "span1", uiOutput("targetPanelExisting1")), 
+      div(class = "span1", uiOutput("targetPanelExisting2"))
     ),
     fluidRow(
       div(class = "span4", uiOutput("targetPanelExisting3")),

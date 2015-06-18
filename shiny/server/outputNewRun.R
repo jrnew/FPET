@@ -205,13 +205,13 @@ readInData <- reactive({
     } else if (input$isoselect == "???") {
       load("shiny/data.output_UNPD.rda")
     } else {
-      data.unpd <- read.csv(file = getFilePath(), header = T, stringsAsFactors = F)
+      data.unpd <- read.csv(file = getFilePath(), header = T, stringsAsFactors = F, encoding = "latin1")
       data.output <- subsetData(data.unpd, iso.select = gsub(" ", "", input$isoselect))
     }
     obs <- data.output
   } else {
     if (!is.null(getFilePath())) {
-      data.unpd <- read.csv(file = getFilePath(), header = T, stringsAsFactors = F)
+      data.unpd <- read.csv(file = getFilePath(), header = T, stringsAsFactors = F, encoding = "latin1")
       if (is.null(input$isoselect)) {
         data.output <- subsetData(data.unpd)
       } else if (input$isoselect == "???") {
