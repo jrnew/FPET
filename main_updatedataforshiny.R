@@ -5,7 +5,7 @@
 #======================================================================
 # Overview:
 # Process updated data/Number-of-women-married-in union_15-49.csv file.
-# Output new shiny/data.output_UNPD2015.rda file using global.R > subsetData().
+# Output new shiny/data.output_UNPD.rda file using global.R > subsetData().
 # Copy new UNPD run folder to output folder, checking that it has data.global.rda etc.
 # Copy result CSV files to tables folder.
 # Edit UNPD run name in global.R > getRunnameUNPD() > run.name & name.
@@ -20,15 +20,15 @@ ProcessMWRAForFPET <- function( # Process updated MWRA file for Shiny FPET app.
   library(dplyr)
   mwra.new <- read.csv(MWRA.new.csv, stringsAsFactors = FALSE)
   mwra.old <- read.csv(MWRA.old.csv, stringsAsFactors = FALSE)
+  # Fix column names of mwra.new
+  names(mwra.new) <- gsub("MW_1549_", "X", names(mwra.new))
+  names(mwra.new)[names(mwra.new) == "LocID"] <- "ISO.code"
+  names(mwra.new)[names(mwra.new) == "Location"] <- "Country"  
   if (!is.logical(all.equal(names(mwra.new), names(mwra.old)))) {
     cat("Mismatch in column names!\n")
     cat(paste0("Column names in MWRA.new.csv: ", paste(names(mwra.new), collapse = ", "), "\n"))
     cat(paste0("Column names in MWRA.old.csv: ", paste(names(mwra.old), collapse = ", "), "\n"))
   }
-  # Fix column names of mwra.new
-  names(mwra.new) <- gsub("MW_1549_", "X", names(mwra.new))
-  names(mwra.new)[names(mwra.new) == "LocID"] <- "ISO.code"
-  names(mwra.new)[names(mwra.new) == "Location"] <- "Country"  
   if (nrow(mwra.new) != nrow(mwra.old)) {
     cat(paste0("MWRA.new.csv has ", nrow(mwra.new), " countries while MWRA.old.csv has ",
                nrow(mwra.old), " countries!\n"))
@@ -50,7 +50,7 @@ ProcessMWRAForFPET <- function( # Process updated MWRA file for Shiny FPET app.
   }
   # Check MWRA differences between mwra.new and mwra.old for countries in both files
   countries <- intersect(mwra.new$Country, mwra.old$Country)
-  years <- names(mwra.new.check)[grepl("X", names(mwra.new.check))]
+  years <- names(mwra.new)[grepl("X", names(mwra.new))]
   mwra.old <- mwra.old[order(mwra.old$Country), ][mwra.old$Country %in% countries, ]
   mwra.new.check <- mwra.new[order(mwra.new$Country), ][mwra.new$Country %in% countries, ]
   for (year in years) {
@@ -61,6 +61,7 @@ ProcessMWRAForFPET <- function( # Process updated MWRA file for Shiny FPET app.
                  paste(countries.with.differences, collapse = ", "), "\n"))
   }
   names(mwra.new) <- gsub("\\.", " ", names(mwra.new))
+  names(mwra.new) <- gsub("X", "", names(mwra.new))
   write.csv(mwra.new, file = MWRA.new.csv, row.names = FALSE)
   cat(paste0("Processed MWRA.new.csv file written out to ", MWRA.new.csv))
 }
@@ -68,7 +69,7 @@ ProcessMWRAForFPET <- function( # Process updated MWRA file for Shiny FPET app.
 ProcessMWRAForFPET(MWRA.new.csv = "data/Number-of-women-married-in union_15-49.csv", 
                    MWRA.old.csv = "data/Number-of-women-married-in union_15-49_UNPD2014.csv")
 #======================================================================
-# Output new shiny/data.output_UNPD2015.rda file using global.R > subsetData().
+# Output new shiny/data.output_UNPD.rda file using global.R > subsetData().
 source("global.R")
 data <- read.csv("data/dataCPmodel.csv", stringsAsFactors = FALSE)
 data.output <- subsetData(data)
@@ -82,3 +83,6 @@ dataCPmodel <- data
 names(data)
 write.csv(dataCPmodel, file = file.path("output", run.name, "dataCPmodel_input.csv"),
           row.names = FALSE)
+#======================================================================
+# Output data.global file for global run.
+SummariseGlobalRun("Run20150423")

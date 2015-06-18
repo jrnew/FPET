@@ -7,7 +7,6 @@ run.on.server <- ifelse(Sys.info()["sysname"] == "Windows", FALSE, TRUE)
 
 library(foreach)
 if (run.on.server) {
-  # change JR, 20140402
   library(doParallel)
   registerDoParallel(cores = detectCores())
 }
@@ -59,7 +58,7 @@ indicator.count.labels <- c("on any contraception" = "Total",
                             "with FP demand met with modern methods" = "Met Demand with Modern Methods")
 #----------------------------------------------------------------------
 getRunnameUNPD <- function() {
-  run.name <- "Run20150408" # change JR, 20140422
+  run.name <- "Run20150423"
   return(list(name = "UNPD 2015", run.name = run.name))
 }
 #----------------------------------------------------------------------

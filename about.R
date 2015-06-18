@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------
 # about.R
-# Jin Rou New, 2013-2014
+# Jin Rou New, 2013-2015
 #----------------------------------------------------------------------
 function() {
   tabPanel(title = "About", value = "nil",
@@ -9,8 +9,8 @@ function() {
              "contraceptive prevalence and unmet need for family planning used by the ",
              "United Nations Population Division (UNPD).",
              "Refer to UNPD's ",
-             a("World Contraceptive Use 2014", 
-               href = "http://www.un.org/en/development/desa/population/publications/dataset/contraception/wcu2014.shtml", target = "_blank"),
+             a("World Contraceptive Use 2015", 
+               href = "http://www.un.org/en/development/desa/population/publications/dataset/contraception/wcu2015.shtml", target = "_blank"),
              " for the most recent database and estimates."),
            p("Instructions for use of FPET are available at: ",
              a("http://www.track20.org/pages/resources/all-resources/track20_tools.", href = "http://www.track20.org/pages/resources/all-resources/track20_tools", target = "_blank")),           
@@ -22,7 +22,7 @@ function() {
            p("Please use the latest version of Google Chrome, Mozilla Firefox or Internet Explorer to run FPET; there may be problems with other browsers/versions."),
            p(em("Suggested citation: New, JR and Alkema, L (2014). Family Planning Estimation Tool (FPET). Available at http://fpet.track20.org/")),
            br(), br(), 
-           p("Last updated: 22 Apr 2015",
+           p("Last updated: 17 Jun 2015",
              br("Created in ",
                 a("R", 
                   href = "http://www.r-project.org/", target = "_blank"),
