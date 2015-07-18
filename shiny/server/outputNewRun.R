@@ -5,7 +5,8 @@
 #----------------------------------------------------------------------
 # Start run alert
 observe({
-  if (input$startRun == 0) return()
+  if (input$chooseAction != "newrun") return(NULL)
+  if (input$startRun == 0) return(NULL)
   if (input$isoselect == "???") return(NULL)
   if (duplicateRun()) return(NULL)
   showshinyalert(session, id = "startRunAlert", HTMLtext = paste("Run started! Proceed to <em>Log</em> tab."))
@@ -13,7 +14,8 @@ observe({
 
 # Duplicate run alert
 observe({
-  if (input$startRun == 0) return()
+  if (input$chooseAction != "newrun") return(NULL)
+  if (input$startRun == 0) return(NULL)
   if (input$isoselect == "???") return(NULL)
   if (duplicateRun()) {
     showshinyalert(session, id = "duplicateRunAlert", HTMLtext = paste("Run name already exists! Please use a different run name."), styleclass = "danger")
@@ -24,6 +26,7 @@ observe({
 
 # Main reactive function for newrun
 RunMCMCAndGetResults <- reactive({
+  if (input$chooseAction != "newrun") return(NULL)
   if (input$startRun == 0) return(NULL)
   if (input$isoselect == "???") return(NULL)
   if (duplicateRun()) return(NULL)
@@ -307,6 +310,7 @@ output$countryMWRAData <- renderDataTable({
 #----------------------------------------------------------------------
 # Show log file
 output$log <- renderPrint({
+  if (input$chooseAction != "newrun") return(NULL)
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
   RunMCMCAndGetResults()
@@ -322,6 +326,7 @@ output$selectChartCategories <- renderUI({
 #----------------------------------------------------------------------
 # Display results data table
 output$resultsView <- renderDataTable({
+  if (input$chooseAction != "newrun") return(NULL)
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
   RunMCMCAndGetResults()
@@ -736,6 +741,7 @@ output$progressPanel2 <- renderUI ({
 #----------------------------------------------------------------------
 # UIs
 output$resultsViewChart <- renderUI({
+  if (input$chooseAction != "newrun") return(NULL)
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
   div(
@@ -756,6 +762,7 @@ output$resultsViewChart <- renderUI({
 })
 #----------------------------------------------------------------------
 output$resultsPlotChart <- renderUI({
+  if (input$chooseAction != "newrun") return(NULL)
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
   div(
@@ -777,6 +784,7 @@ output$resultsPlotChart <- renderUI({
 })
 #----------------------------------------------------------------------
 output$targetPanelAll <- renderUI ({
+  if (input$chooseAction != "newrun") return(NULL)
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
   div(
@@ -793,6 +801,7 @@ output$targetPanelAll <- renderUI ({
 })
 #----------------------------------------------------------------------
 output$progressPanelAll <- renderUI({
+  if (input$chooseAction != "newrun") return(NULL)
   if (input$startRun == 0) return(NULL)
   if (is.null(RunMCMCAndGetResults())) return(NULL)
   div(
