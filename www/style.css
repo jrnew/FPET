@@ -1,8 +1,8 @@
 .navbar {
-    padding-bottom:20px;
+    padding-bottom: 0px;
 }
-.navbar-static-top .navbar-inner .container {
-    padding-right: 100px;
+.navbar-brand {
+    font-size: 20px;
 }
 .well { 
     padding-left: 5px;
@@ -10,7 +10,7 @@
     padding-top: 5px; 
     padding-bottom: 5px; 
     margin-bottom: 5px; 
-    width: auto; 
+    width: 100%;
 }
 textarea, .jslider, select {
     width: 100%;
